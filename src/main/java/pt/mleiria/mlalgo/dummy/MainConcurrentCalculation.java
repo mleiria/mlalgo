@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import pt.mleiria.mlalgo.conf.DatasetsLocation;
 import pt.mleiria.mlalgo.loader.DocumentLoader;
+import pt.mleiria.mlalgo.loader.FileLoader;
 import pt.mleiria.mlalgo.stats.words.WordsMatcher;
 import pt.mleiria.mlalgo.utils.Pair;
 
@@ -33,12 +34,12 @@ public class MainConcurrentCalculation {
     }
 
     private static void bestMatchBasic(String[] args) {
-        DocumentLoader wordsLoader = new DocumentLoader();
+
         args = new String[]{"manuel"};
         try {
             Date startTime;
             Date endTime;
-            final List<String> dictionary = wordsLoader.load(DatasetsLocation.WORDS_DICT);
+            final List<String> dictionary = FileLoader.load(DatasetsLocation.WORDS_DICT);
 
             LOG.log(Level.INFO, "Dictionary Size: {0}", dictionary.size());
 
@@ -61,7 +62,7 @@ public class MainConcurrentCalculation {
         args = new String[]{"mad"};
         try {
             Date startTime, endTime;
-            final List<String> dictionary = wordsLoader.load(DatasetsLocation.WORDS_DICT);
+            final List<String> dictionary = FileLoader.load(DatasetsLocation.WORDS_DICT);
 
             LOG.log(Level.INFO, "Dictionary Size: {0}", dictionary.size());
 

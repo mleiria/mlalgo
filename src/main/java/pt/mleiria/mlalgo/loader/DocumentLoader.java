@@ -29,26 +29,7 @@ public class DocumentLoader {
     private static final String TXT_EXTENSION = "txt";
 
 
-    /**
-     * @param path
-     * @return
-     */
-    public List<String> load(String path) {
-        final Path file = get(path);
-        final List<String> data = new ArrayList<>();
-        try (final InputStream in = newInputStream(file);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                data.add(line);
-            }
-        } catch (final IOException x) {
-            LOG.severe(x.getMessage());
-        } catch (final Exception e) {
-            LOG.severe(e.getMessage());
-        }
-        return data;
-    }
+
 
     /**
      * @param route

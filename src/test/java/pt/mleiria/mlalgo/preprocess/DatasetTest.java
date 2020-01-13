@@ -5,17 +5,16 @@
  */
 package pt.mleiria.mlalgo.preprocess;
 
-import static pt.mleiria.mlalgo.conf.DatasetsLocation.DATA_SETS_DIR;
-
-import java.util.Arrays;
-import java.util.logging.Logger;
-
 import junit.framework.TestCase;
 import pt.mleiria.mlalgo.dataset.Dataset;
 import pt.mleiria.mlalgo.dataset.DatasetBuilder;
 
+import java.util.Arrays;
+import java.util.logging.Logger;
+
+import static pt.mleiria.mlalgo.conf.DatasetsLocation.DATA_SETS_DIR;
+
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public class DatasetTest extends TestCase {
@@ -26,7 +25,7 @@ public class DatasetTest extends TestCase {
     private final String dataFileProstate = DATA_SETS_DIR + "/prostate.data";
     private final String dataFile100MetrosOlymp = DATA_SETS_DIR + "/100MetrosOlymp.csv";
     private final String dataFileMnistTrain = DATA_SETS_DIR + "/mnist/mnist_test.csv";
-    
+
 
     public void testDatasetOlympics() {
         final DatasetBuilder dsb = new DatasetBuilder(dataFile100MetrosOlymp);
@@ -39,7 +38,7 @@ public class DatasetTest extends TestCase {
         assertEquals(27, ds.featuresX.length);
         assertEquals(1900.0, ds.featuresX[1][0]);
     }
-    
+
     public void testDatasetIrisLabelHolder() {
         final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
         dsb.setHasRowHeader(false);
@@ -53,7 +52,7 @@ public class DatasetTest extends TestCase {
         assertEquals(150, ds.labelsY.length);
         assertEquals(150, ds.featuresX.length);
     }
-    
+
     public void testDatasetProstate() {
         final DatasetBuilder dsb = new DatasetBuilder(dataFileProstate);
         dsb.setHasRowHeader(true);
@@ -67,9 +66,9 @@ public class DatasetTest extends TestCase {
         assertEquals(97, ds.featuresX.length);
         LOG.info("Prostate y data: " + Arrays.toString(ds.labelsY));
     }
-    
+
     public void testDatasetMninst() {
-	final DatasetBuilder dsb = new DatasetBuilder(dataFileMnistTrain);
+        final DatasetBuilder dsb = new DatasetBuilder(dataFileMnistTrain);
         dsb.setHasRowHeader(true);
         dsb.setIsLabelConversion(false);
         dsb.setIsLabelInBeginning(true);
@@ -80,8 +79,6 @@ public class DatasetTest extends TestCase {
         assertEquals("label", ds.getHeader()[ds.getHeader().length - 1]);
         //LOG.info("MNIST y data: " + Arrays.toString(ds.labelsY));
     }
-    
-    
-    
+
 
 }

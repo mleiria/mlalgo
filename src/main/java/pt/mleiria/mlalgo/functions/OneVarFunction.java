@@ -1,9 +1,8 @@
 package pt.mleiria.mlalgo.functions;
 
 /**
- *
- * @author manuel
  * @param <T>
+ * @author manuel
  */
 @FunctionalInterface
 public interface OneVarFunction<T, R> {
@@ -14,6 +13,6 @@ public interface OneVarFunction<T, R> {
      * @param x
      * @return a function of the form f(x)
      */
-    public R value(T x);
+    R value(T x);
 
 }

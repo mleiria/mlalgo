@@ -5,17 +5,14 @@
  */
 package pt.mleiria.mlalgo.preprocess;
 
-import static java.lang.Math.pow;
-import static java.lang.System.arraycopy;
-import static pt.mleiria.mlalgo.utils.Arrays2D.addOnes;
-import static pt.mleiria.mlalgo.utils.Arrays2D.copy;
-import static pt.mleiria.mlalgo.utils.Arrays2D.mergeHorizontal;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-
 import pt.mleiria.mlalgo.core.Transformer;
 
+import static java.lang.Math.pow;
+import static java.lang.System.arraycopy;
+import static pt.mleiria.mlalgo.utils.Arrays2D.*;
+
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public class PolynomialFeatures extends BaseTransformer {
@@ -26,25 +23,24 @@ public class PolynomialFeatures extends BaseTransformer {
 
     /**
      * Default includeBias is true
+     *
      * @param degree
      */
     public PolynomialFeatures(int degree) {
         this.degree = degree;
         this.includeBias = true;
     }
-    
-    /**
-    *
-    * @param degree
-    * @param includeBias
-    */
-   public PolynomialFeatures(int degree, boolean includeBias) {
-       this.degree = degree;
-       this.includeBias = includeBias;
-   }
 
     /**
-     *
+     * @param degree
+     * @param includeBias
+     */
+    public PolynomialFeatures(int degree, boolean includeBias) {
+        this.degree = degree;
+        this.includeBias = includeBias;
+    }
+
+    /**
      * @param x
      * @return
      */
@@ -84,7 +80,6 @@ public class PolynomialFeatures extends BaseTransformer {
     }
 
     /**
-     *
      * @param x
      * @return
      */

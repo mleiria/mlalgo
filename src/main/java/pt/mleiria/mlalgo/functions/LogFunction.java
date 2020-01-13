@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pt.mleiria.mlalgo.functions;
 
@@ -14,12 +14,12 @@ public class LogFunction implements OneVarFunction<Double[], Double[]> {
 
     @Override
     public Double[] value(Double[] x) {
-        
-	return Arrays.asList(x)
-		     .stream()
-		     .map(elem -> Math.log(elem))
-		     .collect(Collectors.toList())
-		     .toArray(new Double[x.length]);
+
+        return Arrays.asList(x)
+                .stream()
+                .map(elem -> Math.log(elem))
+                .collect(Collectors.toList())
+                .toArray(new Double[x.length]);
     }
-    
+
 }

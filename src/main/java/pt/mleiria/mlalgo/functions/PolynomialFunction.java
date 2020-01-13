@@ -5,7 +5,6 @@ import static java.lang.Math.max;
 
 /**
  * Mathematical polynomial: c[0] + c[1] * x + c[2] * x^2 + ....
- *
  */
 public class PolynomialFunction implements OneVarFunction<Double, Double> {
 
@@ -24,13 +23,12 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param r double number added to the polynomial.
      * @return PolynomialFunction
      */
     public PolynomialFunction add(double r) {
         final int n = coefficients.length;
-        final double coef[] = new double[n];
+        final double[] coef = new double[n];
         coef[0] = coefficients[0] + r;
         for (int i = 1; i < n; i++) {
             coef[i] = coefficients[i];
@@ -39,7 +37,6 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param p PolynomialFunction
      * @return PolynomialFunction
      */
@@ -80,10 +77,10 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     public PolynomialFunction derivative() {
         final int n = degree();
         if (n == 0) {
-            final double coef[] = {0};
+            final double[] coef = {0};
             return new PolynomialFunction(coef);
         }
-        final double coef[] = new double[n];
+        final double[] coef = new double[n];
         for (int i = 1; i <= n; i++) {
             coef[i - 1] = coefficients[i] * i;
         }
@@ -91,7 +88,6 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param r double
      * @return PolynomialFunction
      */
@@ -117,7 +113,7 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
      */
     public PolynomialFunction integral(double value) {
         final int n = coefficients.length + 1;
-        final double coef[] = new double[n];
+        final double[] coef = new double[n];
         coef[0] = value;
         for (int i = 1; i < n; i++) {
             coef[i] = coefficients[i - 1] / i;
@@ -126,13 +122,12 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param r double
      * @return DhbFunctionEvaluation.PolynomialFunction
      */
     public PolynomialFunction multiply(double r) {
         final int n = coefficients.length;
-        final double coef[] = new double[n];
+        final double[] coef = new double[n];
         for (int i = 0; i < n; i++) {
             coef[i] = coefficients[i] * r;
         }
@@ -140,7 +135,6 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param p DhbFunctionEvaluation.PolynomialFunction
      * @return DhbFunctionEvaluation.PolynomialFunction
      */
@@ -157,7 +151,6 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
      * @param r
      * @return DhbFunctionEvaluation.PolynomialFunction
      */
@@ -166,9 +159,8 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
     }
 
     /**
-     *
-     * @return DhbFunctionEvaluation.PolynomialFunction
      * @param p DhbFunctionEvaluation.PolynomialFunction
+     * @return DhbFunctionEvaluation.PolynomialFunction
      */
     public PolynomialFunction subtract(PolynomialFunction p) {
         final int n = max(p.degree(), degree()) + 1;
@@ -194,7 +186,7 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
                     firstNonZeroCoefficientPrinted = true;
                 }
                 if (n == 0 || coefficients[n] != 1) {
-                    sb.append(Double.toString(coefficients[n]));
+                    sb.append(coefficients[n]);
                 }
                 if (n > 0) {
                     sb.append(" X^").append(n);
@@ -224,10 +216,10 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
      * Returns the value and the derivative of the polynomial for the specified
      * variable value in an array of two elements
      *
-     * @version 1.2
      * @param x double value at which the polynomial is evaluated
      * @return double[0] the value of the polynomial double[1] the derivative of
      * the polynomial
+     * @version 1.2
      */
     public double[] valueAndDerivative(double x) {
         int n = coefficients.length;

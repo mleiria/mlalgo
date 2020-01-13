@@ -6,13 +6,12 @@
 package pt.mleiria.mlalgo.distance;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class EuclideanDistance implements DistanceMetric<Double[], Double[], Double>{
+public class EuclideanDistance implements DistanceMetric<Double[], Double[], Double> {
 
     //private static final Logger LOG = Logger.getLogger(EuclideanDistance.class.getName());
-    
+
     @Override
     public Double calculate(Double[] x, Double[] y) {
         double res = 0.0;
@@ -21,6 +20,6 @@ public class EuclideanDistance implements DistanceMetric<Double[], Double[], Dou
         }
         return Math.sqrt(res);
     }
-    
-    
+
+
 }

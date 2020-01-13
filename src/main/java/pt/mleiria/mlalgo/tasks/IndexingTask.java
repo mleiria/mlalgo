@@ -1,14 +1,14 @@
 package pt.mleiria.mlalgo.tasks;
 
+import pt.mleiria.mlalgo.loader.DocumentLoader;
+import pt.mleiria.mlalgo.stats.words.Document;
+import pt.mleiria.mlalgo.stats.words.Word;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
-import pt.mleiria.mlalgo.loader.DocumentLoader;
-import pt.mleiria.mlalgo.stats.words.Document;
-import pt.mleiria.mlalgo.stats.words.Word;
 
 public class IndexingTask implements Callable<List<Document>> {
 

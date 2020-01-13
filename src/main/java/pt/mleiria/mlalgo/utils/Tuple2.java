@@ -6,25 +6,23 @@
 package pt.mleiria.mlalgo.utils;
 
 /**
- *
- * @author manuel
  * @param <X>
  * @param <Y>
+ * @author manuel
  */
-public class Pair<X, Y> {
-    
+public class Tuple2<X, Y> {
+
     private X x;
     private Y y;
-    
-    public Pair() {
+
+    public Tuple2() {
     }
-    
+
     /**
-     * 
      * @param x
-     * @param y 
+     * @param y
      */
-    public Pair(X x, Y y){
+    public Tuple2(X x, Y y) {
         this.x = x;
         this.y = y;
     }
@@ -36,11 +34,11 @@ public class Pair<X, Y> {
     public Y getY() {
         return y;
     }
-    
+
 
     @Override
-    public String toString(){
-        return "{"+ x + " : " + y + "}";
+    public String toString() {
+        return "{" + x + " : " + y + "}";
     }
-    
+
 }

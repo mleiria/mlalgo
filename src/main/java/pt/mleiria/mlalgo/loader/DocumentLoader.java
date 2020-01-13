@@ -1,24 +1,20 @@
 package pt.mleiria.mlalgo.loader;
 
-import static java.nio.file.Files.newInputStream;
-import static java.nio.file.Paths.get;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import pt.mleiria.mlalgo.stats.words.Word;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import pt.mleiria.mlalgo.stats.words.Word;
 
 public class DocumentLoader {
 
@@ -27,8 +23,6 @@ public class DocumentLoader {
     private static final Pattern PATTERN = Pattern.compile("\\P{IsAlphabetic}+");
     private static final String PDF_EXTENSION = "pdf";
     private static final String TXT_EXTENSION = "txt";
-
-
 
 
     /**
@@ -80,7 +74,7 @@ public class DocumentLoader {
      * @return the file extension associated with the route
      */
     private String getFileExtension(final String route) {
-        return route.substring(route.lastIndexOf('.') + 1, route.length());
+        return route.substring(route.lastIndexOf('.') + 1);
     }
 
     /**

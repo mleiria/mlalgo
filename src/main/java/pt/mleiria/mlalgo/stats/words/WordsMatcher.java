@@ -5,6 +5,12 @@
  */
 package pt.mleiria.mlalgo.stats.words;
 
+import pt.mleiria.mlalgo.distance.LevenshteinDistance;
+import pt.mleiria.mlalgo.tasks.BestMatchingBasicTask;
+import pt.mleiria.mlalgo.tasks.ExistBasicTask;
+import pt.mleiria.mlalgo.tasks.ThreadPoolManager;
+import pt.mleiria.mlalgo.utils.Tuple2;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,12 +20,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import pt.mleiria.mlalgo.distance.LevenshteinDistance;
-import pt.mleiria.mlalgo.tasks.BestMatchingBasicTask;
-import pt.mleiria.mlalgo.tasks.ExistBasicTask;
-import pt.mleiria.mlalgo.tasks.ThreadPoolManager;
-import pt.mleiria.mlalgo.utils.Pair;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
@@ -35,7 +35,7 @@ public class WordsMatcher extends ThreadPoolManager {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    public Pair<Integer, List<String>> getBestMatchingWords(final String word, final List<String> dictionary)
+    public Tuple2<Integer, List<String>> getBestMatchingWords(final String word, final List<String> dictionary)
             throws InterruptedException, ExecutionException {
 
         if (dictionary.isEmpty()) {
@@ -46,7 +46,7 @@ public class WordsMatcher extends ThreadPoolManager {
         final int step = size / numCores;
         int startIndex;
         int endIndex;
-        final List<Future<Pair<Integer, List<String>>>> results = new ArrayList<>();
+        final List<Future<Tuple2<Integer, List<String>>>> results = new ArrayList<>();
 
         for (int i = 0; i < numCores; i++) {
             startIndex = i * step;
@@ -57,7 +57,7 @@ public class WordsMatcher extends ThreadPoolManager {
             }
             final BestMatchingBasicTask task = new BestMatchingBasicTask(startIndex, endIndex, dictionary, word,
                     new LevenshteinDistance());
-            final Future<Pair<Integer, List<String>>> future = executor.submit(task);
+            final Future<Tuple2<Integer, List<String>>> future = executor.submit(task);
             results.add(future);
         }
 
@@ -65,8 +65,8 @@ public class WordsMatcher extends ThreadPoolManager {
 
         final List<String> words = new ArrayList<>();
         int minDistance = Integer.MAX_VALUE;
-        for (final Future<Pair<Integer, List<String>>> future : results) {
-            final Pair<Integer, List<String>> data = future.get();
+        for (final Future<Tuple2<Integer, List<String>>> future : results) {
+            final Tuple2<Integer, List<String>> data = future.get();
             if (data.getX() < minDistance) {
                 words.clear();
                 minDistance = data.getX();
@@ -76,7 +76,7 @@ public class WordsMatcher extends ThreadPoolManager {
             }
 
         }
-        return new Pair<>(minDistance, words);
+        return new Tuple2<>(minDistance, words);
 
     }
 

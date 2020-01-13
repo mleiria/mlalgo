@@ -5,7 +5,6 @@ package pt.mleiria.mlalgo.distance;
  * example the algorithm wants to classify
  *
  * @author author
- *
  */
 public class Distance implements Comparable<Distance> {
 

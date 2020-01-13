@@ -43,7 +43,7 @@ public class KeystoreManager {
      */
     private void loadKeyStore() throws CertificateException, NoSuchAlgorithmException, IOException, KeyStoreException {
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        try (FileInputStream fis = new FileInputStream(KEYSTORE_FILE);) {
+        try (FileInputStream fis = new FileInputStream(KEYSTORE_FILE)) {
             keyStore.load(fis, KEYSTORE_PWD);
         }
     }
@@ -57,7 +57,6 @@ public class KeystoreManager {
     }
 
     /**
-     *
      * @param alias
      * @param pwd
      * @return
@@ -70,7 +69,6 @@ public class KeystoreManager {
     }
 
     /**
-     *
      * @param alias
      * @return
      * @throws KeyStoreException

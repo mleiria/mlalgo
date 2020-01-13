@@ -1,13 +1,13 @@
 package pt.mleiria.mlalgo.dummy;
 
-import static java.lang.System.out;
-
-import java.util.regex.Pattern;
-
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
+
+import java.util.regex.Pattern;
+
+import static java.lang.System.out;
 
 public class SampleCrawler extends WebCrawler {
 

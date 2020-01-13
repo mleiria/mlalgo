@@ -6,7 +6,6 @@
 package pt.mleiria.mlalgo.distance;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public class LevenshteinDistance implements DistanceMetric<String, String, Integer> {

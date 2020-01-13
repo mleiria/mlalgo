@@ -1,5 +1,9 @@
 package pt.mleiria.mlalgo.stats.words;
 
+import pt.mleiria.mlalgo.tasks.IndexingTask;
+import pt.mleiria.mlalgo.tasks.InvertedIndexTask;
+import pt.mleiria.mlalgo.tasks.ThreadPoolManager;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,17 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
-
-import pt.mleiria.mlalgo.loader.DocumentLoader;
-import pt.mleiria.mlalgo.tasks.IndexingTask;
-import pt.mleiria.mlalgo.tasks.InvertedIndexTask;
-import pt.mleiria.mlalgo.tasks.ThreadPoolManager;
 
 public class WordsIndexer extends ThreadPoolManager {
 
@@ -32,7 +27,7 @@ public class WordsIndexer extends ThreadPoolManager {
     /**
      * numTasks = numCores
      */
-    public WordsIndexer(){
+    public WordsIndexer() {
         this.numTasks = numCores;
         invertedIndex = new ConcurrentHashMap<>();
 
@@ -66,7 +61,6 @@ public class WordsIndexer extends ThreadPoolManager {
     }
 
     /**
-     *
      * @return
      */
     private void getFiles() {
@@ -88,10 +82,9 @@ public class WordsIndexer extends ThreadPoolManager {
     }
 
     /**
-     *
      * @param filesPath
      */
-    public void setFiles(final String[] filesPath){
+    public void setFiles(final String[] filesPath) {
         files = Arrays.stream(filesPath)
                 .map(elem -> new File(elem))
                 .toArray(File[]::new);

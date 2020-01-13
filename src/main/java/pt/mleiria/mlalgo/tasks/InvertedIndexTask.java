@@ -3,16 +3,12 @@
  */
 package pt.mleiria.mlalgo.tasks;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import pt.mleiria.mlalgo.stats.words.Document;
 import pt.mleiria.mlalgo.stats.words.Word;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * @author manuel

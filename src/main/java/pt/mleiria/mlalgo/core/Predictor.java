@@ -7,13 +7,14 @@ package pt.mleiria.mlalgo.core;
 
 /**
  * For making predictions
+ *
  * @author manuel
  */
-public interface Predictor extends Estimator{
-    
+public interface Predictor extends Estimator {
+
     Predictor fit(double[][] xTrain, double[] yTrain);
 
     double[] predict(double[][] xTest);
-    
+
     double score(double[][] xTest, double[] yTest);
 }

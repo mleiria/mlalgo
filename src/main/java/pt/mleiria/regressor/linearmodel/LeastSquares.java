@@ -8,23 +8,21 @@ package pt.mleiria.regressor.linearmodel;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
-
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.metrics.RegressorMixin;
 import pt.mleiria.mlalgo.utils.Arrays1D;
 import pt.mleiria.mlalgo.utils.Arrays2D;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class LeastSquares implements Estimator{
-    
+public class LeastSquares implements Estimator {
+
     private double[] w;
     private Double[][] xData;
     private Double[] yLabel;
 
-    
+
     @Override
     public Estimator fit(Double[][] xTrain, Double[] yTrain) {
         this.xData = xTrain;
@@ -32,7 +30,7 @@ public class LeastSquares implements Estimator{
         final RealMatrix x = new Array2DRowRealMatrix(Arrays2D.copyToPrimitive(xData));
         final RealMatrix xt = x.transpose();
         final RealMatrix xtx = xt.multiply(x);
-        
+
         final RealMatrix xtxi = new LUDecomposition(xtx).getSolver().getInverse();
         final RealMatrix xtxixt = xtxi.multiply(xt);
         w = xtxixt.operate(Arrays1D.unBox(yLabel));
@@ -42,9 +40,9 @@ public class LeastSquares implements Estimator{
     @Override
     public Double[] predict(Double[][] xSample) {
         final Double[] res = new Double[xSample.length];
-        for(int i = 0; i < xSample.length; i++){
+        for (int i = 0; i < xSample.length; i++) {
             double x = 0;
-            for(int j = 0; j < xSample[0].length; j++){
+            for (int j = 0; j < xSample[0].length; j++) {
                 x += w[j] * xSample[i][j];
             }
             res[i] = x;
@@ -75,8 +73,8 @@ public class LeastSquares implements Estimator{
     public double getSlope() {
         return w[1];
     }
-    
-    public double[] getCoefs(){
+
+    public double[] getCoefs() {
         return w;
     }
 }

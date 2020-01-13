@@ -3,14 +3,14 @@
  */
 package pt.mleiria.mlalgo.utils;
 
-import static java.lang.Math.random;
-
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
+
+import static java.lang.Math.random;
 
 /**
  * @author manuel
@@ -76,11 +76,11 @@ public class Arrays1D {
         return res;
     }
 
-	/**c
-	 * 
-	 * @param boxed
-	 * @return
-	 */
+    /**c
+     *
+     * @param boxed
+     * @return
+     */
     public static double[] unBox(final Double[] boxed) {
         if (boxed.length > parallelThreshold) {
             return Stream.of(boxed).parallel().mapToDouble(Double::doubleValue).toArray();

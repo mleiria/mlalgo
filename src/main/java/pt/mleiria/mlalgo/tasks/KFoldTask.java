@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pt.mleiria.mlalgo.tasks;
 
@@ -9,11 +9,10 @@ package pt.mleiria.mlalgo.tasks;
  */
 public class KFoldTask implements Runnable {
 
-   
 
     @Override
     public void run() {
-	
+
     }
 
 }

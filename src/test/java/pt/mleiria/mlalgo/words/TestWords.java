@@ -3,14 +3,11 @@
  */
 package pt.mleiria.mlalgo.words;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.logging.Logger;
-
 import junit.framework.TestCase;
 import pt.mleiria.mlalgo.conf.DatasetsLocation;
 import pt.mleiria.mlalgo.stats.words.WordsIndexer;
+
+import java.util.logging.Logger;
 
 /**
  * @author manuel

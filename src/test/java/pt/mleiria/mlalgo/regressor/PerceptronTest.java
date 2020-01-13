@@ -3,17 +3,12 @@
  */
 package pt.mleiria.mlalgo.regressor;
 
-import java.util.Arrays;
-import java.util.logging.Logger;
-
-import org.apache.commons.math3.distribution.NormalDistribution;
-
 import junit.framework.TestCase;
-import pt.mleiria.mlalgo.core.Estimator;
-import pt.mleiria.mlalgo.utils.Pair;
-import pt.mleiria.mlalgo.utils.VUtils;
-import pt.mleiria.regressor.linearmodel.Perceptron;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import pt.mleiria.mlalgo.utils.Tuple2;
 import pt.mleiria.syntheticdata.DataFactory;
+
+import java.util.logging.Logger;
 
 /**
  * @author manuel
@@ -35,7 +30,7 @@ public class PerceptronTest extends TestCase {
         int numCols = 2;
         NormalDistribution nd1 = new NormalDistribution(-2.0, 1.0);
         NormalDistribution nd2 = new NormalDistribution(2.0, 1.0);
-        Pair<Double[][], Double[]> dataGen = DataFactory.generateTwoClasses(nd1, nd2, numRows, numCols);
+        Tuple2<Double[][], Double[]> dataGen = DataFactory.generateTwoClasses(nd1, nd2, numRows, numCols);
 
         xTrain = dataGen.getX();
         yLabelTrain = dataGen.getY();

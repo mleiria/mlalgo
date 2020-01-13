@@ -5,9 +5,7 @@
  */
 package pt.mleiria.mlalgo.dataset;
 
-import static java.lang.Double.valueOf;
-import static java.nio.file.Files.lines;
-import static java.nio.file.Paths.get;
+import pt.mleiria.mlalgo.utils.Arrays1D;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +18,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import pt.mleiria.mlalgo.utils.Arrays1D;
+import static java.lang.Double.valueOf;
+import static java.nio.file.Files.lines;
+import static java.nio.file.Paths.get;
 
 /**
  * Incluir uma DESCR, DATA (features double[][]), TARGET (double[])

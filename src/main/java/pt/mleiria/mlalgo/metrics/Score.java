@@ -6,10 +6,9 @@
 package pt.mleiria.mlalgo.metrics;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public interface Score<S, T, R> {
-    
+
     R score(S yPred, T yTrue);
 }

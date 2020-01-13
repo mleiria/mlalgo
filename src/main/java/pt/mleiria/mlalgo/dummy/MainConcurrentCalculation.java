@@ -5,17 +5,17 @@
  */
 package pt.mleiria.mlalgo.dummy;
 
+import pt.mleiria.mlalgo.conf.DatasetsLocation;
+import pt.mleiria.mlalgo.loader.DocumentLoader;
+import pt.mleiria.mlalgo.loader.FileLoader;
+import pt.mleiria.mlalgo.stats.words.WordsMatcher;
+import pt.mleiria.mlalgo.utils.Tuple2;
+
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import pt.mleiria.mlalgo.conf.DatasetsLocation;
-import pt.mleiria.mlalgo.loader.DocumentLoader;
-import pt.mleiria.mlalgo.loader.FileLoader;
-import pt.mleiria.mlalgo.stats.words.WordsMatcher;
-import pt.mleiria.mlalgo.utils.Pair;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
@@ -44,7 +44,7 @@ public class MainConcurrentCalculation {
             LOG.log(Level.INFO, "Dictionary Size: {0}", dictionary.size());
 
             startTime = new Date();
-            final Pair<Integer, List<String>> result = new WordsMatcher().getBestMatchingWords(args[0], dictionary);
+            final Tuple2<Integer, List<String>> result = new WordsMatcher().getBestMatchingWords(args[0], dictionary);
             final List<String> results = result.getY();
             endTime = new Date();
             LOG.log(Level.INFO, "Word: {0}", args[0]);

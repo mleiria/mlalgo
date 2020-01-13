@@ -22,7 +22,7 @@ public class FileLoader {
      * @param path
      * @return a list of strings
      */
-    public static  List<String> load(String path) {
+    public static List<String> load(String path) {
         final Path file = get(path);
         final List<String> data = new ArrayList<>();
         try (final InputStream in = newInputStream(file);

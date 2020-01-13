@@ -1,16 +1,15 @@
 package pt.mleiria.mlalgo.distance;
+
 /**
- *
- * @author manuel
  * @param <X>
  * @param <Y>
  * @param <R>
+ * @author manuel
  */
 @FunctionalInterface
 public interface DistanceMetric<X, Y, R> {
 
     /**
-     *
      * @param x
      * @param y
      * @return

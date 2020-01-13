@@ -12,26 +12,27 @@ package pt.mleiria.mlalgo.core;
 
 /**
  * For building and fitting models
- * 
+ *
  * @author manuel
  */
 public interface Estimator {
 
-      
+
     /**
      * Learn a model from training data
+     *
      * @param xTrain
-     * @param yTrain 
-     * @return  
+     * @param yTrain
+     * @return
      */
     Estimator fit(final Double[][] xTrain, final Double[] yTrain);
-    
+
     Double[] predict(final Double[][] xSample);
-    
+
     Double score(Double[][] testX, Double[] trueLabelY);
-    
+
     Double[][] getX();
-    
+
     Double[] getY();
-    
+
 }

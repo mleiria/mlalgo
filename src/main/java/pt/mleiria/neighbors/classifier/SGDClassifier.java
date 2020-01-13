@@ -3,18 +3,17 @@
  */
 package pt.mleiria.neighbors.classifier;
 
-import java.util.Arrays;
-import java.util.logging.Logger;
-
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
-
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.functions.LogFunction;
 import pt.mleiria.mlalgo.functions.SigmoidFunction;
 import pt.mleiria.mlalgo.metrics.RegressorMixin;
 import pt.mleiria.mlalgo.utils.Arrays1D;
 import pt.mleiria.mlalgo.utils.Arrays2D;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * @author manuel

@@ -3,10 +3,10 @@
  */
 package pt.mleiria.mlalgo.stats.words;
 
+import pt.mleiria.mlalgo.words.preprocess.Dictionary;
+
 import java.util.Map;
 import java.util.Set;
-
-import pt.mleiria.mlalgo.words.preprocess.Dictionary;
 
 /**
  * The Document class that stores the name of the file that contains the

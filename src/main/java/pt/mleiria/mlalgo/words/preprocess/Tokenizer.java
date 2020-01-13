@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pt.mleiria.mlalgo.words.preprocess;
 
@@ -8,7 +8,7 @@ package pt.mleiria.mlalgo.words.preprocess;
  *
  */
 public interface Tokenizer {
-    
+
     String[] getTokens(String document);
 
 }

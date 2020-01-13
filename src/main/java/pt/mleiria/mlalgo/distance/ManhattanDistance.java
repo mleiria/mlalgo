@@ -8,7 +8,6 @@ package pt.mleiria.mlalgo.distance;
 import static java.lang.Math.abs;
 
 /**
- *
  * @author manuel
  */
 public class ManhattanDistance implements DistanceMetric<Double[], Double[], Double> {

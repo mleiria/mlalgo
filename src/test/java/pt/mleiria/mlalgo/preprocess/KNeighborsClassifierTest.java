@@ -5,11 +5,6 @@
  */
 package pt.mleiria.mlalgo.preprocess;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import junit.framework.TestCase;
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.dataset.Dataset;
@@ -18,12 +13,16 @@ import pt.mleiria.mlalgo.metrics.AccuracyScore;
 import pt.mleiria.mlalgo.metrics.CrossValidationScore;
 import pt.mleiria.mlalgo.metrics.Score;
 import pt.mleiria.mlalgo.utils.Arrays2D;
-import pt.mleiria.mlalgo.utils.Pair;
+import pt.mleiria.mlalgo.utils.Tuple2;
 import pt.mleiria.mlalgo.utils.VUtils;
 import pt.mleiria.neighbors.classifier.KNeighborsClassifier;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public class KNeighborsClassifierTest extends TestCase {
@@ -37,7 +36,7 @@ public class KNeighborsClassifierTest extends TestCase {
         v = new VUtils<>();
         score = new AccuracyScore();
     }
-    
+
     public void testPredict() {
         final Double[][] x = new Double[4][1];
         x[0][0] = 0.;
@@ -60,7 +59,7 @@ public class KNeighborsClassifierTest extends TestCase {
         dsb.setSeparator(",");
         final Dataset ds = dsb.createDataSet();
         ds.loadDataset();
-        final List<Pair<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.featuresX, ds.labelsY, 0.66, true);
+        final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.featuresX, ds.labelsY, 0.66, true);
         final Double[][] trainX = splitter.get(0).getX();
         final Double[][] testX = splitter.get(1).getX();
         final Double[] trainY = splitter.get(0).getY();
@@ -94,8 +93,8 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void bestK(Double[][] trainX, Double[] trainY) {
-    	int bestK = 0;
-    	double bestKScore = 0.;		
+        int bestK = 0;
+        double bestKScore = 0.;
         for (int k = 3; k < 10; k++) {
             final Estimator estimator = new KNeighborsClassifier(k);
             estimator.fit(trainX, trainY);
@@ -104,12 +103,12 @@ public class KNeighborsClassifierTest extends TestCase {
             LOG.info("Cross Validation K:" + k);
             LOG.info("Cross Validation Values:\n" + res);
             LOG.info("Cross Validation Mean and Stdv:" + cv.mean() + " (+ -) " + cv.stdv());
-            if(res > bestKScore) {
-            	bestKScore = res;
-            	bestK = k;
+            if (res > bestKScore) {
+                bestKScore = res;
+                bestK = k;
             }
         }
-        LOG.info("Best k is: " + bestK + " with score: " + bestKScore );
+        LOG.info("Best k is: " + bestK + " with score: " + bestKScore);
         assertTrue(bestK < 10);
     }
 

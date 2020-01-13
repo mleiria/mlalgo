@@ -6,21 +6,19 @@
 package pt.mleiria.mlalgo.regressor;
 
 
-import java.util.logging.Logger;
-
 import junit.framework.TestCase;
 import pt.mleiria.mlalgo.utils.VUtils;
 import pt.mleiria.regressor.linearmodel.LeastSquares;
-import pt.mleiria.regressor.linearmodel.Ridge;
+
+import java.util.logging.Logger;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class LinearRegressionTest extends TestCase{
+public class LinearRegressionTest extends TestCase {
 
     private static final Logger LOG = Logger.getLogger(LinearRegressionTest.class.getName());
-    
+
     private VUtils<Number> vu;
 
     @Override
@@ -28,10 +26,10 @@ public class LinearRegressionTest extends TestCase{
         super.setUp();
         vu = new VUtils<>();
     }
-    
-    
+
+
     /**
-     * 
+     *
      */
     public void testLinearRegression() {
         final LeastSquares lr = new LeastSquares();
@@ -44,7 +42,7 @@ public class LinearRegressionTest extends TestCase{
         x[2][1] = 2.;
         x[3][0] = 1.;
         x[3][1] = 3.;
-        
+
         LOG.info(vu.showContents(x));
 
         final Double[] y = new Double[]{-1., 0.2, 0.9, 2.1};
@@ -52,5 +50,5 @@ public class LinearRegressionTest extends TestCase{
         assertEquals(-0.9500000000000005, lr.getIntercept());
         assertEquals(1.0000000000000004, lr.getSlope());
     }
-    
+
 }

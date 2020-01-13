@@ -9,14 +9,13 @@ import junit.framework.TestCase;
 import pt.mleiria.mlalgo.core.Transformer;
 
 /**
- *
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class MinMaxScalerTest extends TestCase{
+public class MinMaxScalerTest extends TestCase {
 
     Double[][] data = new Double[4][2];
     Transformer t;
-    
+
     @Override
     protected void setUp() throws Exception {
         data[0][0] = -1.;
@@ -29,32 +28,31 @@ public class MinMaxScalerTest extends TestCase{
         data[3][1] = 18.;
         t = new MinMaxScaler();
     }
-    
-    
-    
-    public void testFit(){
+
+
+    public void testFit() {
         t.fit(data);
-        assertEquals(1.,t.getParams(0).getMax());
-        assertEquals(18.,t.getParams(1).getMax());
+        assertEquals(1., t.getParams(0).getMax());
+        assertEquals(18., t.getParams(1).getMax());
     }
-    
-    public void testTransform(){
+
+    public void testTransform() {
         final Double[][] transformed = t.fitTransform(data);
-        
+
         assertEquals(0., transformed[0][0]);
         assertEquals(.25, transformed[1][0]);
         assertEquals(.5, transformed[2][1]);
         assertEquals(1., transformed[3][1]);
     }
-    
+
     public void testTransformCustomMinMax() {
-	((MinMaxScaler)t).setFeaturesRange(10, 20);
-	final Double[][] transformed = t.fitTransform(data);
-	
-	assertEquals(10., transformed[0][0]);
+        ((MinMaxScaler) t).setFeaturesRange(10, 20);
+        final Double[][] transformed = t.fitTransform(data);
+
+        assertEquals(10., transformed[0][0]);
         assertEquals(12.5, transformed[1][0]);
         assertEquals(15., transformed[2][1]);
         assertEquals(20., transformed[3][1]);
-	
+
     }
 }

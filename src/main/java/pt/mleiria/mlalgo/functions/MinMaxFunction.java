@@ -6,20 +6,17 @@
 package pt.mleiria.mlalgo.functions;
 
 /**
- *
  * @author manuel
  */
-public class MinMaxFunction implements OneVarFunction<Double[], Double>{
+public class MinMaxFunction implements OneVarFunction<Double[], Double> {
     /**
-     * 
      * @param x x[0]=value; x[1]=min;x[2]=max
-     * @return 
+     * @return
      */
     @Override
     public Double value(Double[] x) {
-        return (x[0] - x[1])/(x[2] - x[1]);
+        return (x[0] - x[1]) / (x[2] - x[1]);
     }
-    
-    
-    
+
+
 }

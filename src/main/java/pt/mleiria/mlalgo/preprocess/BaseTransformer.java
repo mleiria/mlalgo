@@ -6,24 +6,22 @@
 package pt.mleiria.mlalgo.preprocess;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-
 import pt.mleiria.mlalgo.core.Transformer;
 
 /**
- *
  * @author manuel
  */
 public abstract class BaseTransformer implements Transformer {
-    
+
     protected SummaryStatistics[] sm;
-    
+
     /**
-     * @param colIndex 
+     * @param colIndex
      */
     @Override
     public SummaryStatistics getParams(int colIndex) {
         return sm[colIndex];
     }
-    
-    
+
+
 }

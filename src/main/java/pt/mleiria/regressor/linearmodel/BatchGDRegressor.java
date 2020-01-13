@@ -5,16 +5,15 @@
  */
 package pt.mleiria.regressor.linearmodel;
 
-import java.util.logging.Logger;
-
 import pt.mleiria.mlalgo.core.Estimator;
 
+import java.util.logging.Logger;
+
 /**
- *
  * @author manuel
  */
-public class BatchGDRegressor implements Estimator{
-    
+public class BatchGDRegressor implements Estimator {
+
     private static final Logger LOG = Logger.getLogger(BatchGDRegressor.class.getName());
 /*
     @Override
@@ -47,9 +46,8 @@ public class BatchGDRegressor implements Estimator{
         return null;
     }
     
-  */  
-    
-   
+  */
+
 
     @Override
     public Estimator fit(Double[][] xTrain, Double[] yTrain) {
@@ -76,5 +74,5 @@ public class BatchGDRegressor implements Estimator{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+
 }

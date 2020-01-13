@@ -6,12 +6,11 @@
 package pt.mleiria.mlalgo.preprocess;
 
 /**
- *
  * @author manuel
  */
 public enum Strategy {
-    
+
     MEDIAN,
-    MEAN;
-    
+    MEAN
+
 }

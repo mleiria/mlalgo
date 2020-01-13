@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pt.mleiria.mlalgo.words.preprocess;
 
@@ -10,11 +10,11 @@ import java.util.Set;
  *
  */
 public interface Dictionary {
-    
+
     Integer getWordCount(String word);
-    
+
     int getNumWords();
-    
+
     Set<String> getBagOfWords();
 
 }

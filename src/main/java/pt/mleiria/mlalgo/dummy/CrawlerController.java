@@ -12,7 +12,6 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 /**
- *
  * @author manuel
  */
 public class CrawlerController {

@@ -1,10 +1,10 @@
 /**
- * 
+ *
  */
 package pt.mleiria.mlalgo.stats.words;
 
 /**
- * 
+ *
  * The Word class that stores the string with the word and the measures of that
  * word (TF, DF, and TF-IDF). <p> TF (short for term frequency) is the number of
  * times that a word appears in a document. <p> DF (short for document frequency)
@@ -13,7 +13,7 @@ package pt.mleiria.mlalgo.stats.words;
  * distinguish a document from others. If a word is very common, it's IDF will
  * be low, but if the word appears in only a few documents, it's IDF will be
  * high.
- * 
+ *
  *
  */
 public class Word implements Comparable<Word> {
@@ -26,26 +26,26 @@ public class Word implements Comparable<Word> {
     /*
      * We want the words ordered from a higher to lower tfIdf attribute:
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(Word o) {
-	return Double.compare(o.getTfidf(), this.getTfidf());
+        return Double.compare(o.getTfidf(), this.getTfidf());
     }
 
     /**
      * @return the word
      */
     public String getWord() {
-	return word;
+        return word;
     }
 
     /**
      * @param word the word to set
      */
     public void setWord(String word) {
-	this.word = word;
+        this.word = word;
     }
 
     /**
@@ -53,7 +53,7 @@ public class Word implements Comparable<Word> {
      * @return the tf
      */
     public int getTf() {
-	return tf;
+        return tf;
     }
 
     /**
@@ -61,7 +61,7 @@ public class Word implements Comparable<Word> {
      * @param tf the tf to set
      */
     public void setTf(int tf) {
-	this.tf = tf;
+        this.tf = tf;
     }
 
     /**
@@ -69,7 +69,7 @@ public class Word implements Comparable<Word> {
      * @return the df
      */
     public int getDf() {
-	return df;
+        return df;
     }
 
     /**
@@ -77,31 +77,31 @@ public class Word implements Comparable<Word> {
      * @param df the df to set
      */
     public void setDf(int df) {
-	this.df = df;
+        this.df = df;
     }
 
     /**
-     * 
+     *
      * @param df
      * @param N  the total number of documents in the collection
      */
     public void setDf(int df, int N) {
-	this.df = df;
-	tfidf = tf * Math.log(Double.valueOf(N) / df);
+        this.df = df;
+        tfidf = tf * Math.log(Double.valueOf(N) / df);
     }
 
     /**
      * @return the tfidf
      */
     public double getTfidf() {
-	return tfidf;
+        return tfidf;
     }
 
     /**
      * @param tfidf the tfidf to set
      */
     public void setTfidf(double tfidf) {
-	this.tfidf = tfidf;
+        this.tfidf = tfidf;
     }
 
 }

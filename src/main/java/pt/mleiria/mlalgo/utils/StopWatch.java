@@ -7,10 +7,7 @@ package pt.mleiria.mlalgo.utils;
 
 import static java.lang.System.currentTimeMillis;
 
-import com.sleepycat.je.rep.elections.ElectionAgentThread;
-
 /**
- *
  * @author manuel
  */
 public final class StopWatch {
@@ -33,11 +30,11 @@ public final class StopWatch {
         final long now = currentTimeMillis();
         return (now - start) / 1000.0;
     }
+
     /**
-     * 
      * @return
      */
     public String elapsedTimeToString() {
-	return "Elapsed time: " + elapsedTime() + " secs.";
+        return "Elapsed time: " + elapsedTime() + " secs.";
     }
 }

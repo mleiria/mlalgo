@@ -6,7 +6,6 @@
 package pt.mleiria.mlalgo.dummy;
 
 import pt.mleiria.mlalgo.conf.DatasetsLocation;
-import pt.mleiria.mlalgo.loader.DocumentLoader;
 import pt.mleiria.mlalgo.loader.FileLoader;
 import pt.mleiria.mlalgo.stats.words.WordsMatcher;
 import pt.mleiria.mlalgo.utils.Tuple2;
@@ -48,7 +47,7 @@ public class MainConcurrentCalculation {
             final List<String> results = result.getY();
             endTime = new Date();
             LOG.log(Level.INFO, "Word: {0}", args[0]);
-            LOG.log(Level.INFO, "Minimun distance: {0}", result.getX());
+            LOG.log(Level.INFO, "Minimum distance: {0}", result.getX());
             LOG.log(Level.INFO, "List of best matching words: {0}", results.size());
             LOG.log(Level.INFO, "Similar words: {0}", results);
             LOG.log(Level.INFO, "Execution Time: {0}", (endTime.getTime() - startTime.getTime()));
@@ -58,7 +57,6 @@ public class MainConcurrentCalculation {
     }
 
     private static void existsBasic(String[] args) {
-        DocumentLoader wordsLoader = new DocumentLoader();
         args = new String[]{"mad"};
         try {
             Date startTime, endTime;

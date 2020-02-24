@@ -55,8 +55,7 @@ public class WordsMatcher extends ThreadPoolManager {
             } else {
                 endIndex = (i + 1) * step;
             }
-            final BestMatchingBasicTask task = new BestMatchingBasicTask(startIndex, endIndex, dictionary, word,
-                    new LevenshteinDistance());
+            final BestMatchingBasicTask task = new BestMatchingBasicTask(startIndex, endIndex, dictionary, word, new LevenshteinDistance());
             final Future<Tuple2<Integer, List<String>>> future = executor.submit(task);
             results.add(future);
         }

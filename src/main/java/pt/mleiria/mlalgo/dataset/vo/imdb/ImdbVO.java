@@ -1,9 +1,10 @@
 /**
  *
  */
-package pt.mleiria.mlalgo.dataset.vo;
+package pt.mleiria.mlalgo.dataset.vo.imdb;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  * @author manuel
  *
  */
-public class ImdbVO {
+public class ImdbVO implements Imdb {
     private static final Logger LOG = Logger.getLogger(ImdbVO.class.getName());
 
     private final String[] headers = new String[]{"Rank", "Title", "Genre", "Description", "Director", "Actors",
@@ -32,33 +33,70 @@ public class ImdbVO {
     private double revenueMillions;
     private int metascore;
 
+    private int numColumns;
+
+
     /**
      *
      * @param data
      */
+    @Override
     public void setData(final String[] data) {
-        if (data.length != 12) {
+        numColumns = data.length;
+        if (data.length != headers.length) {
             LOG.warning("Wrong data length: " + data.length);
             LOG.warning(Arrays.toString(data));
         }
         try {
-            rank = Integer.parseInt(data[0]);
+            rank = Imdb.parseInt(data[0]);
             title = data[1];
             genre = data[2];
             description = data[3];
             director = data[4];
             actors = data[5];
-            year = Integer.parseInt(data[6]);
-            runtimeMinutes = Integer.parseInt(data[7]);
-            rating = Double.parseDouble(data[8]);
-            votes = Integer.parseInt(data[9]);
-            revenueMillions = data[10].isEmpty() ? 0d : Double.parseDouble(data[10]);
-            metascore = Integer.parseInt(data[11]);
+            year = Imdb.parseInt(data[6]);
+            runtimeMinutes = Imdb.parseInt(data[7]);
+            rating = Imdb.parseDouble(data[8]);
+            votes = Imdb.parseInt(data[9]);
+            revenueMillions = data[10].isEmpty() ? -1.0d : Imdb.parseDouble(data[10]);
+            metascore = Imdb.parseInt(data[11]);
         } catch (IndexOutOfBoundsException iob) {
             LOG.warning("Missing elements: " + iob.getMessage());
         }
 
     }
+
+
+    @Override
+    public String getPrincipalActor() {
+        return getActors();
+    }
+
+    @Override
+    public int getNumColumns() {
+        return numColumns;
+    }
+
+    @Override
+    public String getMovieTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String[] getMovieGenres() {
+        return genre.split(",");
+    }
+
+    @Override
+    public double getMovieRating() {
+        return getRating();
+    }
+
+    @Override
+    public int getNumberOfVotes() {
+        return getVotes();
+    }
+
 
     public int getRank() {
         return rank;

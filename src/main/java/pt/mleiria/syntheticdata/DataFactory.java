@@ -31,6 +31,9 @@ public final class DataFactory {
             data[i][1] = nd1.sample();
             target[i] = -1.;
         }
+
+
+
         return new Tuple2<>(data, target);
     }
 

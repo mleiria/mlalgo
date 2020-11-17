@@ -9,7 +9,7 @@ import pt.mleiria.regressor.linearmodel.Ridge;
 
 import java.util.logging.Logger;
 
-import static pt.mleiria.mlalgo.utils.MathematicaUtils.round;
+import static pt.mleiria.mlalgo.utils.MathematicalUtils.round;
 
 /**
  * @author manuel

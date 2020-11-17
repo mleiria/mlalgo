@@ -10,9 +10,9 @@ import java.math.RoundingMode;
  * @author manuel
  *
  */
-public class MathematicaUtils {
+public class MathematicalUtils {
 
-    private MathematicaUtils() {
+    private MathematicalUtils() {
     }
 
     /**

@@ -26,6 +26,11 @@ public class AttributeStatistics {
         this.values = Arrays1D.unBox(values);
     }
 
+    public AttributeStatistics(final Integer[] values){
+        this.values = new double[values.length];
+        System.arraycopy(values, 0, this.values, 0, values.length);
+    }
+
     /**
      *
      * @return

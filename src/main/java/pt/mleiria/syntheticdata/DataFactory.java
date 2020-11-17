@@ -33,8 +33,17 @@ public final class DataFactory {
         }
 
 
-
         return new Tuple2<>(data, target);
+    }
+
+    public static Tuple2<Double[], Double[]> generateExponentialCurve(final int size){
+        final Double[] x = new Double[size];
+        final Double[] y = new Double[size];
+        for(int i = 0; i < size; i++){
+            x[i] = Double.valueOf(i);
+            y[i] = Math.exp(x[i]);
+        }
+        return new Tuple2<>(x,y);
     }
 
 

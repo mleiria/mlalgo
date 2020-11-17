@@ -8,7 +8,7 @@ import pt.mleiria.mlalgo.conf.DatasetsLocation;
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.dataset.Dataset;
 import pt.mleiria.mlalgo.dataset.DatasetBuilder;
-import pt.mleiria.mlalgo.utils.MathematicaUtils;
+import pt.mleiria.mlalgo.utils.MathematicalUtils;
 import pt.mleiria.regressor.linearmodel.RidgeCV;
 
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class RidgeCVTest extends TestCase {
         double score = ridgeCV.score(X, y);
         LOG.info("Score:" + score);
         assertEquals(0.01, bestLambda);
-        assertEquals(0.5166, MathematicaUtils.round(score, 4));
+        assertEquals(0.5166, MathematicalUtils.round(score, 4));
     }
 
     public void testRidgeCV() {
@@ -56,7 +56,7 @@ public class RidgeCVTest extends TestCase {
         double score = ridgeCV.score(X, y);
         LOG.info("Score:" + score);
         assertEquals(0.1, bestLambda);
-        assertEquals(0.9874, MathematicaUtils.round(score, 4));
+        assertEquals(0.9874, MathematicalUtils.round(score, 4));
     }
 
 }

@@ -38,4 +38,24 @@ public class FileLoader {
         }
         return data;
     }
+
+    public static List<String> load(final String path, final boolean skipFirstRow) {
+        final Path file = get(path);
+        final List<String> data = new ArrayList<>();
+        try (final InputStream in = newInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            String line;
+            if(skipFirstRow){
+                reader.readLine();
+            }
+            while ((line = reader.readLine()) != null) {
+                data.add(line);
+            }
+        } catch (final IOException x) {
+            LOG.severe(x.getMessage());
+        } catch (final Exception e) {
+            LOG.severe(e.getMessage());
+        }
+        return data;
+    }
 }

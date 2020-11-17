@@ -4,7 +4,6 @@
 package pt.mleiria.mlalgo.dataset.vo.imdb;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**

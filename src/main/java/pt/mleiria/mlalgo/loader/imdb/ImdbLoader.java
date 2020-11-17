@@ -4,8 +4,6 @@
 package pt.mleiria.mlalgo.loader.imdb;
 
 
-
-
 import pt.mleiria.mlalgo.dataset.vo.imdb.Imdb;
 
 import java.io.BufferedReader;
@@ -16,7 +14,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static java.nio.file.Files.newInputStream;
 import static java.nio.file.Paths.get;

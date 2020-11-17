@@ -3,6 +3,7 @@
  */
 package pt.mleiria.mlalgo.utils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -230,5 +231,12 @@ public final class VUtils<N extends Number> {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    public static String formatNumber(final int num){
+        final String pattern = "###,###.###";
+        final DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+        return decimalFormat.format(num);
     }
 }

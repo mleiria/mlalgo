@@ -26,7 +26,9 @@ public class FileLoader {
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                data.add(line);
+                if(!line.trim().isEmpty()){
+                    data.add(line);
+                }
             }
         } catch (final IOException x) {
             LOG.severe(x.getMessage());

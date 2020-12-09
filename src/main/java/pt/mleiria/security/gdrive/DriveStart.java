@@ -16,6 +16,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import pt.mleiria.mlalgo.utils.StopWatch;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -39,6 +40,7 @@ public class DriveStart {
 
     /**
      * Creates an authorized Credential object.
+     *
      * @param HTTP_TRANSPORT The network HTTP Transport.
      * @return An authorized Credential object.
      * @throws IOException If the credentials.json file cannot be found.
@@ -61,41 +63,74 @@ public class DriveStart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private static void downloadFile(Drive service, final File file){
-        //String fileId = "16hpS9fhB0rd4mR8U68QEtMr-JBsFz9Mr";
-        //OutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            OutputStream outputStream = new FileOutputStream("/tmp/" + file.getName());
-            service.files().get(file.getId())
-                    .executeMediaAndDownloadTo(outputStream);
+    /**
+     * @param service
+     * @param file
+     */
+    private static void downloadFile(final Drive service, final File file, final String destinationDir) {
+        LOGGER.info("FileName: " + file.getName() + " FileId: " + file.getId());
+
+        try (final OutputStream outputStream = new FileOutputStream(destinationDir + "/" + file.getName())) {
+            LOGGER.info(file.toPrettyString());
+            service.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
         } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
             e.printStackTrace();
         }
+
+
     }
 
-    public static void main(String... args) throws IOException, GeneralSecurityException {
-        // Build a new authorized API client service.
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+    public static boolean downloadFilesFromFolder(final String folderName, final String destinationDir) {
 
-        // Print the names and IDs for up to 10 files.
-        FileList result = service.files().list()
-                .setPageSize(10)
-                .setFields("nextPageToken, files(id, name)")
-                .execute();
-        List<File> files = result.getFiles();
-        if (files == null || files.isEmpty()) {
-            LOGGER.info("No files found.");
-        } else {
-            LOGGER.info("Files:");
-            for (File file : files) {
-                LOGGER.info("FileName: " + file.getName() + " FileId: " + file.getId());
-                downloadFile(service, file);
+        final StopWatch sw = new StopWatch();
+        String query = "'root' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
+        try {
+            // Build a new authorized API client service.
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            final Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+            //First pass: discover parentId of folderName
+            FileList result = service.files()
+                    .list()
+                    .setQ(query)
+                    .setSpaces("drive")
+                    .setFields("nextPageToken, files(id, name, parents)")
+                    .execute();
+            String id = "";
+            for (File file : result.getFiles()) {
+                final String fname = file.getName();
+                if (fname.substring(0, fname.length() - 4).equals(folderName)) {
+                    id = file.getParents().get(0);
+                    query = query.replace("root", id);
+                    break;
+                }
             }
-        }
+            LOGGER.info("Found File ID: " + id + " for folder: " + folderName);
 
+            result = service.files()
+                    .list()
+                    .setQ(query)
+                    .setSpaces("drive")
+                    //.setPageSize(5)
+                    .setFields("nextPageToken, files(id, name, parents)")
+                    //.setFields("nextPageToken, files(*)")
+                    .execute();
+            final List<File> files = result.getFiles();
+            if (files == null || files.isEmpty()) {
+                LOGGER.info("No files found.");
+            } else {
+                LOGGER.info("Files:");
+                files.stream().parallel().forEach(elem -> downloadFile(service, elem, folderName));
+            }
+            LOGGER.info("Downloaded: " + files.size() + " " + sw.elapsedTimeToString());
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 }

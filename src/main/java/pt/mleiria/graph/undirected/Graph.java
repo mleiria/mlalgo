@@ -30,7 +30,7 @@ public class Graph {
     }
 
     public Graph(List<Integer[]> in) {
-        //First line is V. REad it and construct this Graph
+        //First line is V. Read it and construct this Graph
         this(Integer.parseInt(String.valueOf(in.get(0)[0]) + String.valueOf(in.get(0)[1])));
         int edges = Integer.parseInt(String.valueOf(in.get(1)[0]) + String.valueOf(in.get(1)[1]));
         for (int i = 2; i < edges + 2; i++) {
@@ -89,4 +89,18 @@ public class Graph {
         }
         return s;
     }
+
+    public String toString(List<String> descLst) {
+        String s = vertices + " vertices " + edges + " edges\n";
+        for (int v = 0; v < vertices; v++) {
+            s += v + " " + descLst.get(v) + ": ";
+            for (int w : this.adj(v)) {
+                s += w +  " " + descLst.get(w) + " ";
+            }
+            s += "\n";
+        }
+        return s;
+    }
+
+
 }

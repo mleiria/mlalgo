@@ -2,6 +2,9 @@ package pt.mleiria.mlalgo.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class WriteUtils {
@@ -29,6 +32,20 @@ public class WriteUtils {
             myWriter.write(contents);
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Append to file
+     * @param fileName
+     * @param contents
+     */
+    public static void appendToFile(final String fileName, final String contents){
+        try {
+            Files.write(Paths.get(fileName), contents.getBytes(), StandardOpenOption.APPEND);
+        }catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }

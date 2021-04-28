@@ -16,12 +16,12 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import pt.mleiria.mlalgo.utils.FileLoader;
 import pt.mleiria.mlalgo.utils.StopWatch;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -37,6 +37,8 @@ public class DriveStart {
      */
     private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+
+    private final static String FOLDER_IDENTIFIER = "FOLDER_NAME_";
 
     /**
      * Creates an authorized Credential object.
@@ -77,11 +79,19 @@ public class DriveStart {
             LOGGER.severe(e.getMessage());
             e.printStackTrace();
         }
-
-
     }
 
-    public static boolean downloadFilesFromFolder(final String folderName, final String destinationDir) {
+    /**
+     * @param destinationDir
+     * @return
+     */
+    public static Set<String> getFilesFromFolder(final String destinationDir) {
+        final Set<String> set = new HashSet<>();
+        set.addAll(FileLoader.loadAllFileNamesInDir(destinationDir));
+        return set;
+    }
+
+    public static boolean downloadFilesFromFolder(final String folderName, final String destinationDir, Optional<Set<String>> excludedFiles) {
 
         final StopWatch sw = new StopWatch();
         String query = "'root' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
@@ -91,25 +101,25 @@ public class DriveStart {
             final Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
-            //First pass: discover parentId of folderName
-            FileList result = service.files()
-                    .list()
-                    .setQ(query)
-                    .setSpaces("drive")
-                    .setFields("nextPageToken, files(id, name, parents)")
-                    .execute();
+            final List<File> results = getAllFilesFromDrive(service);
             String id = "";
-            for (File file : result.getFiles()) {
-                final String fname = file.getName();
-                if (fname.substring(0, fname.length() - 4).equals(folderName)) {
+            //First pass: discover parentId of folderName
+            for (File file : results) {
+                String fname = file.getName();
+                LOGGER.info("fname: {" + fname + "}");
+                if(fname.contains(FOLDER_IDENTIFIER)) {
+                    fname = file.getName().replace(FOLDER_IDENTIFIER, "").replace(".jpg", "");
+                    LOGGER.info("Folder name found: " + fname);
+                }
+                if (fname.equals(folderName)) {
                     id = file.getParents().get(0);
                     query = query.replace("root", id);
                     break;
                 }
             }
-            LOGGER.info("Found File ID: " + id + " for folder: " + folderName);
+            LOGGER.info("Found File ID: {" + id + "} for folder: {" + folderName + "}");
 
-            result = service.files()
+            FileList result = service.files()
                     .list()
                     .setQ(query)
                     .setSpaces("drive")
@@ -122,7 +132,17 @@ public class DriveStart {
                 LOGGER.info("No files found.");
             } else {
                 LOGGER.info("Files:");
-                files.stream().parallel().forEach(elem -> downloadFile(service, elem, folderName));
+                if (excludedFiles.isPresent()) {
+                    final Set<String> set = excludedFiles.get();
+                    files.stream().parallel()
+                            .filter(elem -> !elem.getName().startsWith(FOLDER_IDENTIFIER))
+                            .filter(elem -> !set.contains(elem.getName()))
+                            .forEach(elem -> downloadFile(service, elem, destinationDir));
+                } else {
+                    files.stream().parallel()
+                            .filter(elem -> !elem.getName().startsWith(FOLDER_IDENTIFIER))
+                            .forEach(elem -> downloadFile(service, elem, destinationDir));
+                }
             }
             LOGGER.info("Downloaded: " + files.size() + " " + sw.elapsedTimeToString());
         } catch (Exception e) {
@@ -131,6 +151,27 @@ public class DriveStart {
             return false;
         }
         return true;
+    }
+
+    /**
+     *
+     * @param service
+     * @return a list of all files in drive (root folder)
+     * @throws IOException
+     */
+    private static List<File> getAllFilesFromDrive(final Drive service) throws IOException {
+        final FileList result = service.files()
+                .list()
+                //.setQ(query)
+                //.setSpaces("drive")
+                .setFields("nextPageToken, files(id, name, parents)")
+                .execute();
+        LOGGER.info("Total files in drive: " + result.size());
+        return result.getFiles();
+    }
+
+    public static void main(String[] args) {
+        DriveStart.downloadFilesFromFolder("Finn", "/home/manuel/Elements/Datasets/imageDB/", Optional.empty());
     }
 
 }

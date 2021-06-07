@@ -12,7 +12,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.infinispan>11.0.4.Final</version.infinispan>
     </properties>
-
     <build>
         <plugins>
             <plugin>

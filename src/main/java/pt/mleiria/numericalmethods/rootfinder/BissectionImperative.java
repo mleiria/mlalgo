@@ -26,7 +26,8 @@ public class BissectionImperative {
      * - f contínua em [a,b]
      * - f(a)f(b) < 0
      */
-    public BissectionImperative(final double a, final double b, ToDoubleFunction<Double> f, final double epsilon, final long maxIter) {
+    public BissectionImperative(final double a, final double b, ToDoubleFunction<Double> f,
+                                final double epsilon, final long maxIter) {
         this.a = a;
         this.b = b;
         this.f = f;
@@ -41,7 +42,7 @@ public class BissectionImperative {
         xm = a;
     }
 
-    ToDoubleBiFunction<Double, Double> step = (elem1, elem2) -> (elem1 + elem2) / 2.0;
+    ToDoubleBiFunction<Double, Double> step = (am, bm) -> (am + bm) / 2.0;
 
     public Optional<Double> findRoot() {
         for (int i = 0; i < maxIter; i++) {
@@ -57,7 +58,7 @@ public class BissectionImperative {
                 } else {
                     am = xm1;
                 }
-                //System.out.println(am + "              " + bm + "              " + xm + "  " + xm1 + "              " + f.applyAsDouble(xm1));
+                System.out.printf("%d    %.12f    %.12f    %n", i, xm, f.applyAsDouble(xm));
                 xm = xm1;
             }
         }
@@ -70,9 +71,8 @@ public class BissectionImperative {
         ToDoubleFunction<Double> f = elem -> Math.pow(elem, 3) - elem - 2.0;
         double a = 1.0;
         double b = 2.0;
-        double epsilon = 0.0000001;
+        double epsilon = 1E-10;
         BissectionImperative bissectionImperative = new BissectionImperative(a, b, f, epsilon, 100);
-        //1.521484375
         System.out.println(bissectionImperative.findRoot());
     }
 

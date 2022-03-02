@@ -6,8 +6,6 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -20,7 +18,6 @@ import pt.mleiria.mlalgo.utils.FileLoader;
 import pt.mleiria.mlalgo.utils.StopWatch;
 
 import java.io.*;
-import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.logging.Logger;
 

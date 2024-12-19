@@ -14,7 +14,6 @@ import static java.lang.Math.random;
 
 /**
  * @author manuel
- *
  */
 public class Arrays1D {
 
@@ -26,7 +25,6 @@ public class Arrays1D {
     private static int parallelThreshold = 30000000;
 
     /**
-     *
      * @param value
      */
     public static void setParallelThreshold(final int value) {
@@ -34,20 +32,17 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param unBoxed
      * @return
      */
     public static Double[] box(final double[] unBoxed) {
-        if (unBoxed.length > parallelThreshold) {
-            return DoubleStream.of(unBoxed).parallel().boxed().toArray(Double[]::new);
-        } else {
-            return DoubleStream.of(unBoxed).boxed().toArray(Double[]::new);
-        }
+        return unBoxed.length > parallelThreshold
+                ? DoubleStream.of(unBoxed).parallel().boxed().toArray(Double[]::new)
+                : DoubleStream.of(unBoxed).boxed().toArray(Double[]::new);
+
     }
 
     /**
-     *
      * @param vector
      * @return
      */
@@ -59,6 +54,7 @@ public class Arrays1D {
 
     /**
      * flats a matrix into a row vector
+     *
      * @param data
      * @return
      */
@@ -76,22 +72,21 @@ public class Arrays1D {
         return res;
     }
 
-    /**c
+    /**
+     * c
      *
      * @param boxed
      * @return
      */
     public static double[] unBox(final Double[] boxed) {
-        if (boxed.length > parallelThreshold) {
-            return Stream.of(boxed).parallel().mapToDouble(Double::doubleValue).toArray();
-        } else {
-            return Stream.of(boxed).mapToDouble(Double::doubleValue).toArray();
-        }
+        return boxed.length > parallelThreshold
+                ? Stream.of(boxed).parallel().mapToDouble(Double::doubleValue).toArray()
+                : Stream.of(boxed).mapToDouble(Double::doubleValue).toArray();
+
     }
 
 
     /**
-     *
      * @param x
      * @param y
      * @return
@@ -112,7 +107,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param x
      * @param p
      * @return a Double[] with the values x[i] = 0 where the predicate is false
@@ -131,10 +125,8 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param matrix
-     * @param colIndex
-     *                     starts at zero
+     * @param colIndex starts at zero
      * @return
      */
     public static Double[] getColumn(final Double[][] matrix, final int colIndex) {
@@ -146,7 +138,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param x
      * @param y
      */
@@ -177,7 +168,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param x
      * @param func
      * @return
@@ -191,7 +181,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param start
      * @param size
      * @return
@@ -207,7 +196,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param range
      * @param size
      * @return
@@ -221,7 +209,6 @@ public class Arrays1D {
     }
 
     /**
-     *
      * @param values
      * @param indexes
      * @return

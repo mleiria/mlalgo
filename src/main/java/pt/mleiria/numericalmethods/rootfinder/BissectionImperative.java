@@ -1,7 +1,8 @@
 package pt.mleiria.numericalmethods.rootfinder;
 
 import java.util.Optional;
-import java.util.function.*;
+import java.util.function.ToDoubleBiFunction;
+import java.util.function.ToDoubleFunction;
 
 /**
  * Condições a verificar:
@@ -69,6 +70,7 @@ public class BissectionImperative {
 
     public static void main(String[] args) {
         ToDoubleFunction<Double> f = elem -> Math.pow(elem, 3) - elem - 2.0;
+        //ToDoubleFunction<Double> f1 = elem -> Math.pow(elem, 2) - 2.0;
         double a = 1.0;
         double b = 2.0;
         double epsilon = 1E-10;

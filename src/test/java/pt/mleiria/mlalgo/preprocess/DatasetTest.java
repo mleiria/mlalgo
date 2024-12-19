@@ -8,11 +8,10 @@ package pt.mleiria.mlalgo.preprocess;
 import junit.framework.TestCase;
 import pt.mleiria.mlalgo.dataset.Dataset;
 import pt.mleiria.mlalgo.dataset.DatasetBuilder;
+import pt.mleiria.mlalgo.utils.ResourceFileLoader;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
-
-import static pt.mleiria.mlalgo.conf.DatasetsLocation.DATA_SETS_DIR;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
@@ -21,30 +20,14 @@ public class DatasetTest extends TestCase {
 
     private static final Logger LOG = Logger.getLogger(DatasetTest.class.getName());
 
-    private final String dataFileIris = DATA_SETS_DIR + "/iris.data";
-    private final String dataFileProstate = DATA_SETS_DIR + "/prostate.data";
-    private final String dataFile100MetrosOlymp = DATA_SETS_DIR + "/100MetrosOlymp.csv";
-    private final String dataFileMnistTrain = DATA_SETS_DIR + "/mnist/mnist_test.csv";
-
-
-    public void testDatasetOlympics() {
-        final DatasetBuilder dsb = new DatasetBuilder(dataFile100MetrosOlymp);
-        dsb.setHasRowHeader(false);
-        dsb.setIsLabelConversion(false);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        assertEquals(27, ds.labelsY.length);
-        assertEquals(27, ds.featuresX.length);
-        assertEquals(1900.0, ds.featuresX[1][0]);
-    }
 
     public void testDatasetIrisLabelHolder() {
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setHasRowHeader(false);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("iris.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(true)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         LOG.info(ds.getLabelHolder().toString());
         LOG.info(Arrays.toString(ds.getHeader()));
@@ -54,11 +37,13 @@ public class DatasetTest extends TestCase {
     }
 
     public void testDatasetProstate() {
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileProstate);
-        dsb.setHasRowHeader(true);
-        dsb.setIsLabelConversion(false);
-        dsb.setSeparator("\t");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileProstate = ResourceFileLoader.getFilePath("prostate.csv");
+
+        final Dataset ds = DatasetBuilder.create(dataFileProstate)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(false)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         LOG.info(Arrays.toString(ds.getHeader()));
         assertEquals("lcavol", ds.getHeader()[0]);
@@ -68,11 +53,12 @@ public class DatasetTest extends TestCase {
     }
 
     public void testDatasetMninst() {
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileMnistTrain);
-        dsb.setHasRowHeader(true);
-        dsb.setIsLabelConversion(false);
-        dsb.setIsLabelInBeginning(true);
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileMnistTrain = ResourceFileLoader.getFilePath("mnist_test.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileMnistTrain)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(false)
+                .setIsLabelInBeginning(true)
+                .createDataSet();
         ds.loadDataset();
         //LOG.info(Arrays.toString(ds.getHeader()));
         assertEquals("1x1", ds.getHeader()[0]);

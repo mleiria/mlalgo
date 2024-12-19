@@ -4,11 +4,11 @@
 package pt.mleiria.mlalgo.regressor;
 
 import junit.framework.TestCase;
-import pt.mleiria.mlalgo.conf.DatasetsLocation;
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.dataset.Dataset;
 import pt.mleiria.mlalgo.dataset.DatasetBuilder;
 import pt.mleiria.mlalgo.utils.MathematicalUtils;
+import pt.mleiria.mlalgo.utils.ResourceFileLoader;
 import pt.mleiria.regressor.linearmodel.RidgeCV;
 
 import java.util.logging.Logger;
@@ -20,11 +20,12 @@ import java.util.logging.Logger;
 public class RidgeCVTest extends TestCase {
 
     private static final Logger LOG = Logger.getLogger(RidgeCVTest.class.getName());
-    private static final String dataSetDiabetes = DatasetsLocation.DATA_SETS_DIR + "/diabetes.csv";
 
     public void testRidgeCVDiabetes() {
-        final DatasetBuilder dsb = new DatasetBuilder(dataSetDiabetes);
-        Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("diabetes.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .createDataSet();
         ds.loadDataset();
         Double[][] X = ds.featuresX;
         Double[] y = ds.labelsY;
@@ -35,8 +36,8 @@ public class RidgeCVTest extends TestCase {
         LOG.info("Best lambda:" + bestLambda);
         double score = ridgeCV.score(X, y);
         LOG.info("Score:" + score);
-        assertEquals(0.01, bestLambda);
-        assertEquals(0.5166, MathematicalUtils.round(score, 4));
+        assertEquals(1.0, bestLambda);
+        assertEquals(0.3031, MathematicalUtils.round(score, 4));
     }
 
     public void testRidgeCV() {

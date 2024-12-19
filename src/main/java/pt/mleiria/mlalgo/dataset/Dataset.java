@@ -9,13 +9,12 @@ import pt.mleiria.mlalgo.utils.Arrays1D;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.lang.Double.valueOf;
@@ -30,6 +29,11 @@ import static java.nio.file.Paths.get;
 public class Dataset {
 
     private static final Logger LOG = Logger.getLogger(Dataset.class.getName());
+
+    private static final Function<String[], String[]> REMOVE_QUOTES =
+            s -> Arrays.stream(s)
+                    .map(elem -> elem.replaceAll("\"", ""))
+                    .toArray(String[]::new);
 
     public Double[][] featuresX;
     public Double[] labelsY;
@@ -65,13 +69,11 @@ public class Dataset {
      */
     public void loadDataset() {
         try (Stream<String> stream = lines(get(file))) {
-            int rows = lineCounter();
-            if (hasRowHeader) {
-                rows--;
-            }
-            featuresX = new Double[rows][];
-            labelsY = new Double[rows];
-            stream.forEach(line -> loadRow(line));
+            final int numRows = hasRowHeader ? lineCounter() - 1 : lineCounter();
+
+            featuresX = new Double[numRows][];
+            labelsY = new Double[numRows];
+            stream.forEach(this::loadRow);
 
         } catch (final IOException ex) {
             LOG.log(Level.SEVERE, "File Not Found: {0}", ex.getMessage());
@@ -128,15 +130,37 @@ public class Dataset {
             isHeaderLoaded = true;
             header = new String[tmp.length];
             System.arraycopy(tmp, 0, header, 0, tmp.length);
+            header = REMOVE_QUOTES.apply(header);
             return;
         }
-        final Double[] tmpRow = new Double[tmp.length - 1];
-        for (int i = 0; i < tmp.length - 1; i++) {
-            tmpRow[i] = valueOf(tmp[i]);
-        }
+        featuresX[rowIndex] =
+        IntStream.range(0, tmp.length - 1)
+            .mapToDouble(i -> Double.parseDouble(tmp[i]))
+                .boxed()
+                .toArray(Double[]::new);
+        //Handle the last column
         final int lastColumnIndex = tmp.length - 1;
         loadLabel(tmp[lastColumnIndex]);
-        featuresX[rowIndex] = tmpRow;
+        rowIndex++;
+    }
+    private void loadRowV1(final String line) {
+
+        final String[] tmp = line.split(separator);
+        if (hasRowHeader && !isHeaderLoaded) {
+            isHeaderLoaded = true;
+            header = new String[tmp.length];
+            System.arraycopy(tmp, 0, header, 0, tmp.length);
+            header = REMOVE_QUOTES.apply(header);
+            return;
+        }
+        featuresX[rowIndex] =
+                IntStream.range(0, tmp.length - 1)
+                        .mapToDouble(i -> Double.parseDouble(tmp[i]))
+                        .boxed()
+                        .toArray(Double[]::new);
+        //Handle the last column
+        final int lastColumnIndex = tmp.length - 1;
+        loadLabel(tmp[lastColumnIndex]);
         rowIndex++;
     }
 

@@ -6,12 +6,11 @@
 package pt.mleiria.mlalgo.preprocess;
 
 import junit.framework.TestCase;
-import pt.mleiria.mlalgo.dataset.Dataset;
-import pt.mleiria.mlalgo.dataset.DatasetBuilder;
 import pt.mleiria.mlalgo.utils.Arrays1D;
 import pt.mleiria.mlalgo.utils.Arrays2D;
 import pt.mleiria.mlalgo.utils.Tuple2;
 import pt.mleiria.mlalgo.utils.VUtils;
+import pt.mleiria.syntheticdata.DataFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +25,9 @@ public class Arrays2DTest extends TestCase {
     private static final Logger LOG = Logger.getLogger(Arrays2DTest.class.getName());
 
     public void testTrainSplit() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-
-        ds.loadDataset();
-        final Double[][] x = ds.featuresX;
-        final Double[] y = ds.labelsY;
+        final Tuple2<Double[][], Double[]> dataset = DataFactory.loadIrisDataset();
+        final Double[][] x = dataset.getX();
+        final Double[] y = dataset.getY();
         final VUtils<Number> v = new VUtils<>();
         assertEquals(150, x.length);
         final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(x, y, 0.5, true);
@@ -52,14 +45,9 @@ public class Arrays2DTest extends TestCase {
     }
 
     public void testKfold() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        final Double[][] x = ds.featuresX;
-        final Double[] y = ds.labelsY;
+        final Tuple2<Double[][], Double[]> dataset = DataFactory.loadIrisDataset();
+        final Double[][] x = dataset.getX();
+        final Double[] y = dataset.getY();
         final VUtils<Number> v = new VUtils<>();
         assertEquals(150, x.length);
         final int cv = 7;

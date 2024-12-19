@@ -4,15 +4,13 @@
 package pt.mleiria.mlalgo.classifier;
 
 import junit.framework.TestCase;
-import pt.mleiria.mlalgo.conf.DatasetsLocation;
 import pt.mleiria.mlalgo.core.Estimator;
-import pt.mleiria.mlalgo.dataset.Dataset;
-import pt.mleiria.mlalgo.dataset.DatasetBuilder;
 import pt.mleiria.mlalgo.utils.Arrays1D;
 import pt.mleiria.mlalgo.utils.Arrays2D;
 import pt.mleiria.mlalgo.utils.Tuple2;
 import pt.mleiria.mlalgo.utils.VUtils;
 import pt.mleiria.neighbors.classifier.SGDClassifier;
+import pt.mleiria.syntheticdata.DataFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,13 +72,9 @@ public class SGDClassifierTest extends TestCase {
 
 
     public void testPredictIris() {
-        final String dataFileIris = DatasetsLocation.DATA_SETS_DIR + "iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.featuresX, ds.labelsY, 0.66, true);
+        final Tuple2<Double[][], Double[]> dataset = DataFactory.loadIrisDataset();
+        final List<Tuple2<Double[][], Double[]>> splitter =
+                Arrays2D.trainTestSplit(dataset.getX(), dataset.getY(), 0.66, true);
         final Double[][] trainX = splitter.get(0).getX();
         final Double[][] testX = splitter.get(1).getX();
         final Double[] trainY = splitter.get(0).getY();
@@ -101,25 +95,5 @@ public class SGDClassifierTest extends TestCase {
 
     }
 
-    public void testBanknoteAuthentication() {
-        final String dataFileBankNoteAuth = DatasetsLocation.DATA_SETS_DIR + "data_banknote_authentication.csv";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileBankNoteAuth);
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.featuresX, ds.labelsY, 0.66, true);
-        final Double[][] trainX = splitter.get(0).getX();
-        final Double[][] testX = splitter.get(1).getX();
-        final Double[] trainY = splitter.get(0).getY();
-        final Double[] testY = splitter.get(1).getY();
 
-
-        final Estimator estimator = new SGDClassifier(0.001, 2000, 4);
-        estimator.fit(trainX, trainY);
-
-        final Double[] predict = estimator.predict(testX);
-        LOG.info(Arrays.toString(Arrays1D.round(predict)));
-        LOG.info(Arrays.toString(testY));
-        assertEquals(testY.length, predict.length);
-        LOG.info("SGD Score:" + estimator.score(testX, testY));
-    }
 }

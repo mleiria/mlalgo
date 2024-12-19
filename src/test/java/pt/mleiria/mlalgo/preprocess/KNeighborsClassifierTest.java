@@ -13,9 +13,11 @@ import pt.mleiria.mlalgo.metrics.AccuracyScore;
 import pt.mleiria.mlalgo.metrics.CrossValidationScore;
 import pt.mleiria.mlalgo.metrics.Score;
 import pt.mleiria.mlalgo.utils.Arrays2D;
+import pt.mleiria.mlalgo.utils.ResourceFileLoader;
 import pt.mleiria.mlalgo.utils.Tuple2;
 import pt.mleiria.mlalgo.utils.VUtils;
 import pt.mleiria.neighbors.classifier.KNeighborsClassifier;
+import pt.mleiria.syntheticdata.DataFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,13 +55,8 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testPredictIris() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.featuresX, ds.labelsY, 0.66, true);
+        final Tuple2<Double[][], Double[]> ds = DataFactory.loadIrisDataset();
+        final List<Tuple2<Double[][], Double[]>> splitter = Arrays2D.trainTestSplit(ds.getX(), ds.getY(), 0.66, true);
         final Double[][] trainX = splitter.get(0).getX();
         final Double[][] testX = splitter.get(1).getX();
         final Double[] trainY = splitter.get(0).getY();
@@ -76,14 +73,9 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testCrossValidation() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
-        ds.loadDataset();
-        final Double[][] trainX = ds.featuresX;
-        final Double[] trainY = ds.labelsY;
+        final Tuple2<Double[][], Double[]> ds = DataFactory.loadIrisDataset();
+        final Double[][] trainX = ds.getX();
+        final Double[] trainY = ds.getY();
         final Estimator estimator = new KNeighborsClassifier(3);
         estimator.fit(trainX, trainY);
         final CrossValidationScore cv = new CrossValidationScore(estimator, Optional.of(5), Optional.of(true));
@@ -113,11 +105,12 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testPredictIrisThreeSample() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("iris.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(true)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
@@ -134,11 +127,12 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testPredictIrisOneSampleVirginica() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("iris.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(true)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
@@ -153,11 +147,12 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testPredictIrisOneSampleSetosa() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("iris.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(true)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
@@ -172,11 +167,12 @@ public class KNeighborsClassifierTest extends TestCase {
     }
 
     public void testPredictIrisOneSampleVersicolor() {
-        final String dataFileIris = "/home/manuel/tools/adalineProcesses/mlearning/knn/iris.data";
-        final DatasetBuilder dsb = new DatasetBuilder(dataFileIris);
-        dsb.setIsLabelConversion(true);
-        dsb.setSeparator(",");
-        final Dataset ds = dsb.createDataSet();
+        final String dataFileIris = ResourceFileLoader.getFilePath("iris.csv");
+        final Dataset ds = DatasetBuilder.create(dataFileIris)
+                .setHasRowHeader(true)
+                .setIsLabelConversion(true)
+                .setSeparator(",")
+                .createDataSet();
         ds.loadDataset();
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;

@@ -1,9 +1,6 @@
 package pt.mleiria.graph;
 
 import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 /**
  * LIFO

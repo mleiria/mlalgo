@@ -1,6 +1,5 @@
 package pt.mleiria.numericalmethods.rootfinder;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;

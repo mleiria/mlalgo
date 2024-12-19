@@ -1,7 +1,5 @@
 package pt.mleiria.graph.undirected;
 
-import pt.mleiria.graph.Bag;
-
 public class GraphProcesor {
 
 

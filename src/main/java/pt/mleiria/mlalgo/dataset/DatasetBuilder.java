@@ -16,13 +16,17 @@ public class DatasetBuilder {
     private String separator;
     private boolean isLabelInBeginning;
 
+    public static DatasetBuilder create(final String file) {
+        return new DatasetBuilder(file);
+    }
+
     /**
      * Defaults to classical csv
      * No header
      * Separated by ,
      * No label conversion
      */
-    public DatasetBuilder(final String file) {
+    private DatasetBuilder(final String file) {
         this.file = file;
         hasRowHeader = false;
         isLabelConversion = false;

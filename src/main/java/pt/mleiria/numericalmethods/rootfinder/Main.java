@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         final ToDoubleFunction<Double> f = x -> Math.pow(x, 3) - x - 2.0;
-        double a = 1.0;
+        double a = -1.0;
         double b = 2.0;
 
         final ToDoubleFunction<Double> f1 = x -> 1E6 * Math.exp(x) + (281E3 / x) * (Math.exp(x) - 1) - 1.780E6;

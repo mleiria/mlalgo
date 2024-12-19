@@ -5,10 +5,7 @@
  */
 package pt.mleiria.mlalgo.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
@@ -308,7 +305,7 @@ public class Arrays2D {
      * testY)}
      */
     public static List<Tuple2<Double[][], Double[]>> trainTestSplit(Double[][] x, Double[] y, double trainSize,
-																	boolean isShuffle) {
+                                                                    boolean isShuffle) {
         if (trainSize > 1. || trainSize < 0.) {
             throw new IllegalArgumentException("trainSize must be in interval [0, 1]");
         }
@@ -364,7 +361,7 @@ public class Arrays2D {
      * testY)}
      */
     public static List<Tuple2<Double[][], Double[]>> trainTestSplit(Double[][] x, Double[] y, int trainSize,
-																	boolean isShuffle) {
+                                                                    boolean isShuffle) {
         if (trainSize > x.length) {
             throw new IllegalArgumentException("trainSize must be < " + x.length);
         }
@@ -435,7 +432,7 @@ public class Arrays2D {
      * @return
      */
     public static List<Tuple2<Double[][], Double[]>> kFold(final Double[][] trainX, final Double[] trainY, final int cv,
-														   final boolean isShuffle) {
+                                                           final boolean isShuffle) {
         final List<Tuple2<Double[][], Double[]>> res = new ArrayList<>();
         final int rows = trainY.length;
         final int cols = trainX[0].length;
@@ -487,15 +484,12 @@ public class Arrays2D {
      * @return
      */
     public static double[][] copyToPrimitive(final Double[][] x) {
-        final int rows = x.length;
-        final int cols = x[0].length;
-        final double[][] res = new double[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                res[i][j] = x[i][j];
-            }
-        }
-        return res;
+        return Arrays.stream(x)
+                .map(row ->
+                        Arrays.stream(row)
+                                .mapToDouble(Double::doubleValue)
+                                .toArray())
+                .toArray(double[][]::new);
     }
 
 }

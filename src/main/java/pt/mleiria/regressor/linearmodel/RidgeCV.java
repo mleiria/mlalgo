@@ -54,8 +54,13 @@ public class RidgeCV implements Estimator {
         double bestScore = Double.NEGATIVE_INFINITY;
         for (int i = 0; i < lambdas.length; i++) {
             Ridge ridge = new Ridge(lambdas[i], fitIntercept);
-            final CrossValidationScore cvs = new CrossValidationScore(ridge, Optional.of(cv), Optional.of(isShuffle));
-            final Double score = cvs.score(xTrain, yTrain);
+
+            final Double score = CrossValidationScore.create(ridge)
+                    .setCv(cv)
+                    .setShuffle(isShuffle)
+                    .score(xTrain, yTrain);
+
+
             if (score > bestScore) {
                 bestScore = score;
                 bestRidge = new Ridge(lambdas[i], fitIntercept);

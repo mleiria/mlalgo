@@ -11,6 +11,12 @@ package pt.mleiria.mlalgo.metrics;
  */
 public class RegressorMixin implements Score<Double[], Double[], Double> {
 
+
+    public static RegressorMixin create() {
+        return new RegressorMixin();
+    }
+
+    private RegressorMixin(){}
     /**
      * The best possible score is 1.0 and it can be negative (because the model can
      * be arbitrarily worse). A constant model that always predicts the expected

@@ -15,10 +15,9 @@ public class SigmoidFunction implements OneVarFunction<Double[], Double[]> {
     @Override
     public Double[] value(final Double[] x) {
 
-        return Arrays.asList(x)
-                .stream()
+        return Arrays.stream(x)
                 .map(elem -> 1. / (1. + Math.exp(-elem)))
-                .collect(Collectors.toList())
+                .toList()
                 .toArray(new Double[x.length]);
     }
 }

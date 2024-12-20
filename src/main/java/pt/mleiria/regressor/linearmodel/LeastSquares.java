@@ -53,7 +53,7 @@ public class LeastSquares implements Estimator {
     @Override
     public Double score(Double[][] testX, Double[] yTrue) {
         final Double[] yPred = predict(testX);
-        return new RegressorMixin().score(yPred, yTrue);
+        return RegressorMixin.create().score(yPred, yTrue);
     }
 
     @Override

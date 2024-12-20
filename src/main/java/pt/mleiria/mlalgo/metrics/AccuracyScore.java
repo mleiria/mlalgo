@@ -6,6 +6,7 @@
 package pt.mleiria.mlalgo.metrics;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
@@ -29,10 +30,9 @@ public class AccuracyScore implements Score<Double[], Double[], Double> {
      * @return
      */
     public double score(Double[] yPred, Double[] yTrue, boolean normalized) {
-        if (normalized) {
-            return score(yPred, yTrue);
-        }
-        return calculate(yPred, yTrue);
+        return normalized
+                ? score(yPred, yTrue)
+                : calculate(yPred, yTrue);
     }
 
     /**
@@ -45,13 +45,10 @@ public class AccuracyScore implements Score<Double[], Double[], Double> {
         if (size != yTrue.length) {
             throw new IllegalArgumentException("Sizes dont match.");
         }
-        double counter = 0.0;
-        for (int i = 0; i < size; i++) {
-            if (Objects.equals(yTrue[i], yPred[i])) {
-                counter++;
-            }
-        }
-        return counter;
+        return
+        IntStream.range(0,size)
+                .filter(i -> Objects.equals(yTrue[i], yPred[i]))
+                .count();
     }
 
 

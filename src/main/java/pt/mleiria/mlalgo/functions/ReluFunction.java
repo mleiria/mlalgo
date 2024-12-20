@@ -14,11 +14,9 @@ public class ReluFunction implements OneVarFunction<Double[], Double[]> {
 
     @Override
     public Double[] value(final Double[] x) {
-
-        return Arrays.asList(x)
-                .stream()
-                .map(elem -> Math.tanh(elem))
-                .collect(Collectors.toList())
+        return Arrays.stream(x)
+                .map(Math::tanh)
+                .toList()
                 .toArray(new Double[x.length]);
     }
 }

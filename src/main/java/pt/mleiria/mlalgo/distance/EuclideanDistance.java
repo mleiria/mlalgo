@@ -5,6 +5,8 @@
  */
 package pt.mleiria.mlalgo.distance;
 
+import java.util.stream.IntStream;
+
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
@@ -14,11 +16,11 @@ public class EuclideanDistance implements DistanceMetric<Double[], Double[], Dou
 
     @Override
     public Double calculate(Double[] x, Double[] y) {
-        double res = 0.0;
-        for (int i = 0; i < x.length; i++) {
-            res += Math.pow(x[i] - y[i], 2);
-        }
-        return Math.sqrt(res);
+        return Math.sqrt(
+                IntStream.range(0, x.length)
+                        .mapToDouble(i -> Math.pow(x[i] - y[i], 2))
+                        .sum()
+        );
     }
 
 

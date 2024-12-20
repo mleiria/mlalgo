@@ -23,5 +23,19 @@ public abstract class BaseTransformer implements Transformer {
         return sm[colIndex];
     }
 
+    public SummaryStatistics[] accumulateStatistics(final Double[][] xTrain) {
+        final int cols = xTrain[0].length;
+        sm = new SummaryStatistics[cols];
+        for (int j = 0; j < cols; j++) {
+            sm[j] = new SummaryStatistics();
+        }
+        for (Double[] doubles : xTrain) {
+            for (int j = 0; j < cols; j++) {
+                sm[j].addValue(doubles[j]);
+            }
+        }
+        return sm;
+    }
+
 
 }

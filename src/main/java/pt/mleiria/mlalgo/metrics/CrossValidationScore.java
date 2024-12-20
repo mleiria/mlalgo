@@ -23,23 +23,28 @@ import static java.lang.Math.sqrt;
 public class CrossValidationScore implements Score<Double[][], Double[], Double> {
 
     private final Estimator estimator;
-    private final Integer cv;
+    private Integer cv = 5;
     private final SummaryStatistics sm;
-    private final boolean isShuffle;
+    private  boolean isShuffle;
 
-    /**
-     * @param estimator
-     * @param trainX
-     * @param trainY
-     * @param cv        defaults to 5
-     * @param isShuffle defaults to false
-     */
-    public CrossValidationScore(final Estimator estimator, final Optional<Integer> cv,
-                                final Optional<Boolean> isShuffle) {
+    public static CrossValidationScore create(final Estimator estimator) {
+        return new CrossValidationScore(estimator);
+    }
+
+
+    private CrossValidationScore(final Estimator estimator) {
         this.estimator = estimator;
-        this.cv = cv.orElse(5);
-        this.isShuffle = isShuffle.orElse(false);
         sm = new SummaryStatistics();
+    }
+
+    public CrossValidationScore setCv(Integer cv) {
+        this.cv = cv;
+        return this;
+    }
+
+    public CrossValidationScore setShuffle(boolean shuffle) {
+        isShuffle = shuffle;
+        return this;
     }
 
     /**

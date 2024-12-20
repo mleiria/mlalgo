@@ -14,11 +14,9 @@ public class LogFunction implements OneVarFunction<Double[], Double[]> {
 
     @Override
     public Double[] value(Double[] x) {
-
-        return Arrays.asList(x)
-                .stream()
-                .map(elem -> Math.log(elem))
-                .collect(Collectors.toList())
+        return Arrays.stream(x)
+                .map(Math::log)
+                .toList()
                 .toArray(new Double[x.length]);
     }
 

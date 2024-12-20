@@ -7,6 +7,8 @@ package pt.mleiria.mlalgo.utils;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import static java.lang.Math.random;
@@ -37,15 +39,20 @@ public class Arrays2D {
      * numCols
      */
     public static Double[][] genMatrix(final int numRows, final int numCols, final int startValue) {
-        final Double[][] matrix = new Double[numRows][numCols];
-        int cnt = startValue;
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                matrix[i][j] = (double) cnt++;
-            }
-        }
-        return matrix;
+        return
+                IntStream.range(0, numRows)
+                        .mapToObj(i -> IntStream.range(0, numCols)
+                                .mapToObj(j -> (double) (startValue + i * numCols + j))
+                                .toArray(Double[]::new))
+                        .toArray(Double[][]::new);
     }
+
+
+    Predicate<Integer> testIntPred(final Integer i) {
+        return x -> x.intValue() != i.intValue();
+    }
+
+    Function<Integer, Predicate<Integer>> testFuncPred = i -> x -> x.intValue() != i.intValue();
 
     /**
      * Element wise multiplication
@@ -55,14 +62,12 @@ public class Arrays2D {
      * @return
      */
     public static double[] hadamardProduct(final double[] x, final double[] y) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("Vectors must be the same size");
-        }
-        final double[] res = new double[x.length];
-        for (int i = 0; i < x.length; i++) {
-            res[i] = x[i] * y[i];
-        }
-        return res;
+        Validator.validateThrowIfMatch(x.length, y.length, (a, b) -> !Objects.equals(a, b),
+                () -> "Vectors must be the same size. Found x: " + x.length + " y: " + y.length);
+        return
+                IntStream.range(0, x.length)
+                        .mapToDouble(i -> x[i] * y[i])
+                        .toArray();
     }
 
     /**
@@ -71,16 +76,15 @@ public class Arrays2D {
      * @return
      */
     public static double[] dot(final double[] x, final double[][] y) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("Num cols of x must have the same size of Num rows of y");
-        }
-        final double[] res = new double[x.length];
-        for (int j = 0; j < y[0].length; j++) {
-            for (int i = 0; i < x.length; i++) {
-                res[j] += x[i] * y[i][j];
-            }
-        }
-        return res;
+        Validator.validateThrowIfMatch(x.length, y.length, (a, b) -> !Objects.equals(a, b),
+                () -> "Num cols of x must have the same size of Num rows of y");
+        return
+                IntStream.range(0, y[0].length)
+                        .mapToDouble(j -> IntStream.range(0, x.length)
+                                .mapToDouble(i -> x[i] * y[i][j])
+                                .sum())
+                        .toArray();
+
     }
 
     /**
@@ -88,11 +92,7 @@ public class Arrays2D {
      * @return
      */
     public static Double sum(final Double[] x) {
-        double res = 0;
-        for (int i = 0; i < x.length; i++) {
-            res += x[i];
-        }
-        return res;
+        return Arrays.stream(x).mapToDouble(Double::doubleValue).sum();
     }
 
     /**
@@ -470,7 +470,7 @@ public class Arrays2D {
      * @param indexes
      * @return
      */
-    public static Double[][] genMatrixFromIndexes(final Double[][] values, final int[] indexes) {
+    public static Double[][] genMatrixFromIndexes(final Double[][] values, final Integer[] indexes) {
         final Double[][] res = new Double[indexes.length][];
         for (int i = 0; i < res.length; i++) {
             res[i] = new Double[values[0].length];

@@ -69,15 +69,15 @@ public class SGDClassifier implements Estimator {
         Double[] weights = Arrays1D.rand(xTrain[0].length);
 
         for (int i = 0; i < numIter; i++) {
-            final int[] ind = Arrays1D.randomChoice(xTrain.length, batchSize);
+            final Integer[] ind = Arrays1D.randomChoice(xTrain.length, batchSize);
             lossSGD[i] = computeLoss(xTrain, yTrain, weights);
             Double[] dW = computeGrad(
                     Arrays2D.genMatrixFromIndexes(xTrain, ind),
                     Arrays1D.genVectorFromIndexes(yTrain, ind),
                     weights);
             //w = w - learningRate * dW
-            dW = Arrays1D.oper(dW, elem -> elem * learningRate);
-            weights = Arrays1D.oper(weights, dW, (x, y) -> x - y);
+            dW = Arrays1D.dblOperator(dW, elem -> elem * learningRate);
+            weights = Arrays1D.dblOperator(weights, dW, (x, y) -> x - y);
         }
         w = new Double[weights.length];
         System.arraycopy(weights, 0, w, 0, w.length);
@@ -87,9 +87,9 @@ public class SGDClassifier implements Estimator {
     public Double[] computeGrad(final Double[][] xTrain, final Double[] yTrain, final Double[] w) {
         final int l = xTrain.length;
         final Double[] prob = probability(xTrain, w);
-        final Double[] dZ = Arrays1D.oper(prob, yTrain, (a, b) -> a - b);
+        final Double[] dZ = Arrays1D.dblOperator(prob, yTrain, (a, b) -> a - b);
         final Double[] res = Arrays1D.dot(dZ, xTrain);
-        return Arrays1D.oper(res, elem -> elem / (double) l);
+        return Arrays1D.dblOperator(res, elem -> elem / (double) l);
     }
 
     /**
@@ -103,13 +103,13 @@ public class SGDClassifier implements Estimator {
 
         final int l = xTrain.length;
         final Double[] prob = probability(xTrain, w);
-        final Double[] firstTerm = Arrays1D.oper(yTrain, new LogFunction().value(prob), (a, b) -> a * b);
+        final Double[] firstTerm = Arrays1D.dblOperator(yTrain, new LogFunction().value(prob), (a, b) -> a * b);
         final Double[] yy = new Double[yTrain.length];
         System.arraycopy(yTrain, 0, yy, 0, yy.length);
         Arrays.setAll(yy, i -> 1. - yy[i]);
         Arrays.setAll(prob, i -> 1. - prob[i]);
-        final Double[] secondTerm = Arrays1D.oper(yy, new LogFunction().value(prob), (a, b) -> a * b);
-        final Double[] res = Arrays1D.oper(firstTerm, secondTerm, (a, b) -> a + b);
+        final Double[] secondTerm = Arrays1D.dblOperator(yy, new LogFunction().value(prob), (a, b) -> a * b);
+        final Double[] res = Arrays1D.dblOperator(firstTerm, secondTerm, (a, b) -> a + b);
         return -Arrays2D.sum(res) / l;
     }
 
@@ -140,7 +140,7 @@ public class SGDClassifier implements Estimator {
     @Override
     public Double score(Double[][] testX, Double[] trueLabelY) {
         final Double[] yPred = Arrays1D.round(predict(testX));
-        return new RegressorMixin().score(yPred, trueLabelY);
+        return RegressorMixin.create().score(yPred, trueLabelY);
     }
 
     /* (non-Javadoc)

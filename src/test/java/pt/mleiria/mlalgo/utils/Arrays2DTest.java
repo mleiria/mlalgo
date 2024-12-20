@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.mleiria.mlalgo.preprocess;
+package pt.mleiria.mlalgo.utils;
 
 import junit.framework.TestCase;
-import pt.mleiria.mlalgo.utils.Arrays1D;
-import pt.mleiria.mlalgo.utils.Arrays2D;
-import pt.mleiria.mlalgo.utils.Tuple2;
-import pt.mleiria.mlalgo.utils.VUtils;
 import pt.mleiria.syntheticdata.DataFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -92,7 +89,7 @@ public class Arrays2DTest extends TestCase {
 
     public void testGenMatrixFromIndexes() {
         final Double[][] matrix = Arrays2D.genMatrix(3, 2);
-        final Double[][] m1 = Arrays2D.genMatrixFromIndexes(matrix, new int[]{0, 2});
+        final Double[][] m1 = Arrays2D.genMatrixFromIndexes(matrix, new Integer[]{0, 2});
         LOG.info(new VUtils<Double>().showContents(m1));
         assertEquals(2, m1.length);
         assertEquals(0., m1[0][0]);
@@ -111,20 +108,20 @@ public class Arrays2DTest extends TestCase {
     public void testOper() {
         final Double[] x = new Double[]{1., 2., 3.};
         final Double[] y = new Double[]{2., 3., 4.};
-        Double[] res = Arrays1D.oper(x, y, (a, b) -> a * b);
+        Double[] res = Arrays1D.dblOperator(x, y, (a, b) -> a * b);
         assertEquals(2., res[0]);
         assertEquals(6., res[1]);
         assertEquals(12., res[2]);
-        res = Arrays1D.oper(x, y, (a, b) -> a - b);
+        res = Arrays1D.dblOperator(x, y, (a, b) -> a - b);
         assertEquals(-1., res[0]);
         assertEquals(-1., res[1]);
         assertEquals(-1., res[2]);
-        res = Arrays1D.oper(x, y, (a, b) -> a + b);
+        res = Arrays1D.dblOperator(x, y, (a, b) -> a + b);
         assertEquals(3., res[0]);
         assertEquals(5., res[1]);
         assertEquals(7., res[2]);
         final Double[] xx = new Double[]{4., 2., 6.};
-        res = Arrays1D.oper(xx, elem -> elem / 2.);
+        res = Arrays1D.dblOperator(xx, elem -> elem / 2.);
         assertEquals(2., res[0]);
         assertEquals(1., res[1]);
         assertEquals(3., res[2]);
@@ -134,8 +131,28 @@ public class Arrays2DTest extends TestCase {
         final Double[][] y = Arrays2D.genMatrix(3, 2, 1);
         LOG.info(new VUtils<Double>().showContents(y));
         final double[] x = new double[]{7., 8., 9.};
-        final double[] res = Arrays2D.dot(x, Arrays2D.copyToPrimitive(y));
+        final Double[] res = Arrays.stream(Arrays2D.dot(x, Arrays2D.copyToPrimitive(y)))
+                .boxed()
+                .toArray(Double[]::new);
+        LOG.info(new VUtils<Double>().showContents(res));
         assertEquals(76., res[0]);
-        assertEquals(3, res.length);
+        assertEquals(100., res[1]);
+        assertEquals(2, res.length);
+    }
+
+    public void testGenMatrixWithStartValue() {
+        final int numRows = 3;
+        final int numCols = 2;
+        final int startValue = 1;
+
+        final Double[][] y = Arrays2D.genMatrix(numRows, numCols, startValue);
+        LOG.info(new VUtils<Double>().showContents(y));
+
+        assertEquals(1., y[0][0]);
+        assertEquals(2., y[0][1]);
+        assertEquals(3., y[1][0]);
+        assertEquals(4., y[1][1]);
+        assertEquals(5., y[2][0]);
+        assertEquals(6., y[2][1]);
     }
 }

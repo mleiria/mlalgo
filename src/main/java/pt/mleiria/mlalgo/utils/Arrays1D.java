@@ -3,11 +3,14 @@
  */
 package pt.mleiria.mlalgo.utils;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.lang.Math.random;
@@ -25,15 +28,15 @@ public class Arrays1D {
     private static int parallelThreshold = 30000000;
 
     /**
-     * @param value
+     * @param value the value to set
      */
     public static void setParallelThreshold(final int value) {
         parallelThreshold = value;
     }
 
     /**
-     * @param unBoxed
-     * @return
+     * @param unBoxed the array to box
+     * @return a boxed array
      */
     public static Double[] box(final double[] unBoxed) {
         return unBoxed.length > parallelThreshold
@@ -43,40 +46,33 @@ public class Arrays1D {
     }
 
     /**
-     * @param vector
-     * @return
+     * @param vector the vector to convert
+     * @return an array of integers
      */
     public static Integer[] convertToInt(final Double[] vector) {
-        final Integer[] res = new Integer[vector.length];
-        System.arraycopy(vector, 0, res, 0, vector.length);
-        return res;
+        return
+                Arrays.stream(vector).map(Double::intValue)
+                        .toArray(Integer[]::new);
     }
 
     /**
      * flats a matrix into a row vector
      *
-     * @param data
-     * @return
+     * @param data the matrix to convert
+     * @return a row vector
      */
-    public static Double[] convertToVector(final int[][] data) {
-        final int numRows = data.length;
-        final int numCols = data[0].length;
-        final Double[] res = new Double[numRows * numCols];
-        int cnt = 0;
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                res[cnt] = Double.valueOf(data[i][j]);
-                cnt++;
-            }
-        }
-        return res;
+    public static Double[] convertToVector(final Double[][] data) {
+        return
+                Arrays.stream(data)
+                        .flatMap(Arrays::stream)
+                        .toArray(Double[]::new);
     }
 
     /**
-     * c
      *
-     * @param boxed
-     * @return
+     *
+     * @param boxed the array to unbox
+     * @return an unboxed array
      */
     public static double[] unBox(final Double[] boxed) {
         return boxed.length > parallelThreshold
@@ -92,9 +88,8 @@ public class Arrays1D {
      * @return
      */
     public static Double[] dot(final Double[] x, final Double[][] y) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("Num cols of x must have the same size of Num rows of y");
-        }
+        Validator.validateThrowIfMatch(x.length, y.length, (a, b) -> !Objects.equals(a, b),
+                () -> "Num cols of x must have the same size of Num rows of y");
 
         final Double[] res = new Double[y[0].length];
         for (int j = 0; j < y[0].length; j++) {
@@ -112,16 +107,11 @@ public class Arrays1D {
      * @return a Double[] with the values x[i] = 0 where the predicate is false
      */
     public static Double[] filter(final Double[] x, final Predicate<Double> p) {
+        return
+                Arrays.stream(x)
+                        .map(elem -> p.test(elem) ? elem : 0.)
+                        .toArray(Double[]::new);
 
-        final Double[] res = new Double[x.length];
-        for (int i = 0; i < x.length; i++) {
-            if (p.test(x[i])) {
-                res[i] = x[i];
-            } else {
-                res[i] = 0.;
-            }
-        }
-        return res;
     }
 
     /**
@@ -130,26 +120,22 @@ public class Arrays1D {
      * @return
      */
     public static Double[] getColumn(final Double[][] matrix, final int colIndex) {
-        final Double[] col = new Double[matrix.length];
-        for (int i = 0; i < matrix.length; i++) {
-            col[i] = matrix[i][colIndex];
-        }
-        return col;
+        return
+                Arrays.stream(matrix)
+                        .map(row -> row[colIndex])
+                        .toArray(Double[]::new);
     }
 
     /**
      * @param x
      * @param y
      */
-    public static Double[] oper(final Double[] x, final Double[] y, final BiFunction<Double, Double, Double> func) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("Vectors must be the same size");
-        }
-        final Double[] res = new Double[x.length];
-        for (int i = 0; i < x.length; i++) {
-            res[i] = func.apply(x[i], y[i]);
-        }
-        return res;
+    public static Double[] dblOperator(final Double[] x, final Double[] y, final BiFunction<Double, Double, Double> func) {
+        Validator.validateThrowIfMatch(x.length, y.length, (a, b) -> !Objects.equals(a, b), () -> "Vectors must be the same size");
+        return
+                IntStream.range(0, x.length)
+                        .mapToObj(i -> func.apply(x[i], y[i]))
+                        .toArray(Double[]::new);
     }
 
     /**
@@ -160,24 +146,30 @@ public class Arrays1D {
      * @return
      */
     public static Double[] rand(final int size) {
-        final Double[] components = new Double[size];
-        for (int i = 0; i < size; i++) {
-            components[i] = random();
-        }
-        return components;
+        return dblOperator(new Double[size], x -> random());
+
+
     }
 
     /**
-     * @param x
-     * @param func
-     * @return
+     * @param x    the vector
+     * @param func the function to apply
+     * @return a new vector with the function applied to each element
      */
-    public static Double[] oper(final Double[] x, final Function<Double, Double> func) {
-        final Double[] res = new Double[x.length];
-        for (int i = 0; i < x.length; i++) {
-            res[i] = func.apply(x[i]);
-        }
-        return res;
+    public static Double[] dblOperator(final Double[] x, final Function<Double, Double> func) {
+        return x.length > parallelThreshold
+                ? Arrays.stream(x).parallel().map(func).toArray(Double[]::new)
+                : Arrays.stream(x).map(func).toArray(Double[]::new);
+    }
+
+    /**
+     * @param x    the vector
+     * @param func the function to apply
+     * @return a new vector with the function applied to each element
+     */
+    public static Integer[] intOperator(final Integer[] x, final Function<Integer, Integer> func) {
+        return Arrays.stream(x).map(func).toArray(Integer[]::new);
+
     }
 
     /**
@@ -186,13 +178,11 @@ public class Arrays1D {
      * @return
      */
     public static Double[] genVector(final int start, final int size) {
-        final Double[] res = new Double[size];
-        int cnt = start;
-        for (int i = 0; i < size; i++) {
-            res[i] = (double) cnt;
-            cnt++;
-        }
-        return res;
+        return
+                IntStream.range(0, size)
+                        .mapToObj(i -> (double) (i + start))
+                        .toArray(Double[]::new);
+
     }
 
     /**
@@ -200,12 +190,8 @@ public class Arrays1D {
      * @param size
      * @return
      */
-    public static int[] randomChoice(final int range, final int size) {
-        final int[] res = new int[size];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = RND.nextInt(range);
-        }
-        return res;
+    public static Integer[] randomChoice(final int range, final int size) {
+        return intOperator(new Integer[size], x -> RND.nextInt(range));
     }
 
     /**
@@ -213,27 +199,21 @@ public class Arrays1D {
      * @param indexes
      * @return
      */
-    public static Double[] genVectorFromIndexes(final Double[] values, final int[] indexes) {
-        final Double[] res = new Double[indexes.length];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = values[indexes[i]];
-        }
-        return res;
+    public static Double[] genVectorFromIndexes(final Double[] values, final Integer[] indexes) {
+        return
+                Arrays.stream(indexes).mapToDouble(index -> values[index])
+                        .boxed()
+                        .toArray(Double[]::new);
     }
 
     public static Double[] round(final Double[] x) {
-        final Double[] res = new Double[x.length];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = (double) Math.round(x[i]);
-        }
-        return res;
+        return dblOperator(x, elem -> (double) Math.round(elem));
     }
 
     public static Double[] cloneVector(final Double[] x) {
-        if (x.length > parallelThreshold) {
-            return Stream.of(x).parallel().toArray(Double[]::new);
-        } else {
-            return Stream.of(x).toArray(Double[]::new);
-        }
+        return x.length > parallelThreshold
+                ? Stream.of(x).parallel().toArray(Double[]::new)
+                : Stream.of(x).toArray(Double[]::new);
+
     }
 }

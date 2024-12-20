@@ -78,8 +78,10 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[] trainY = ds.getY();
         final Estimator estimator = new KNeighborsClassifier(3);
         estimator.fit(trainX, trainY);
-        final CrossValidationScore cv = new CrossValidationScore(estimator, Optional.of(5), Optional.of(true));
-        final Double res = cv.score(trainX, trainY);
+        final Double res = CrossValidationScore.create(estimator)
+                .setCv(5)
+                .setShuffle(true)
+                .score(trainX, trainY);
         LOG.info("Cross Validation:\n" + res);
         bestK(trainX, trainY);
     }
@@ -90,7 +92,9 @@ public class KNeighborsClassifierTest extends TestCase {
         for (int k = 3; k < 10; k++) {
             final Estimator estimator = new KNeighborsClassifier(k);
             estimator.fit(trainX, trainY);
-            final CrossValidationScore cv = new CrossValidationScore(estimator, Optional.of(5), Optional.of(true));
+            final CrossValidationScore cv = CrossValidationScore.create(estimator)
+                    .setCv(5)
+                    .setShuffle(true);
             final Double res = cv.score(trainX, trainY);
             LOG.info("Cross Validation K:" + k);
             LOG.info("Cross Validation Values:\n" + res);

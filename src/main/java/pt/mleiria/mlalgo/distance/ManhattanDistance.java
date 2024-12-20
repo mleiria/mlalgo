@@ -5,6 +5,8 @@
  */
 package pt.mleiria.mlalgo.distance;
 
+import java.util.stream.IntStream;
+
 import static java.lang.Math.abs;
 
 /**
@@ -14,11 +16,10 @@ public class ManhattanDistance implements DistanceMetric<Double[], Double[], Dou
 
     @Override
     public Double calculate(Double[] x, Double[] y) {
-        double res = 0.0;
-        for (int i = 0; i < x.length; i++) {
-            res += abs(x[i] - y[i]);
-        }
-        return res;
+        return
+                IntStream.range(0, x.length)
+                        .mapToDouble(i -> abs(x[i] - y[i]))
+                        .sum();
     }
 
 }

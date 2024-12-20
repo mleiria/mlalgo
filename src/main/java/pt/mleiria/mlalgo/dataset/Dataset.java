@@ -73,6 +73,7 @@ public class Dataset {
 
             featuresX = new Double[numRows][];
             labelsY = new Double[numRows];
+            // Stream of lines to process
             stream.forEach(this::loadRow);
 
         } catch (final IOException ex) {
@@ -88,7 +89,7 @@ public class Dataset {
          * Swap first col of featuresX with labelsY
          */
         if (isLabelInBeginning) {
-            Double[] tgt = Arrays1D.getColumn(featuresX, 0);
+            final Double[] tgt = Arrays1D.getColumn(featuresX, 0);
             for (int i = 0; i < featuresX.length; i++) {
                 featuresX[i][0] = labelsY[i];
             }
@@ -143,26 +144,7 @@ public class Dataset {
         loadLabel(tmp[lastColumnIndex]);
         rowIndex++;
     }
-    private void loadRowV1(final String line) {
 
-        final String[] tmp = line.split(separator);
-        if (hasRowHeader && !isHeaderLoaded) {
-            isHeaderLoaded = true;
-            header = new String[tmp.length];
-            System.arraycopy(tmp, 0, header, 0, tmp.length);
-            header = REMOVE_QUOTES.apply(header);
-            return;
-        }
-        featuresX[rowIndex] =
-                IntStream.range(0, tmp.length - 1)
-                        .mapToDouble(i -> Double.parseDouble(tmp[i]))
-                        .boxed()
-                        .toArray(Double[]::new);
-        //Handle the last column
-        final int lastColumnIndex = tmp.length - 1;
-        loadLabel(tmp[lastColumnIndex]);
-        rowIndex++;
-    }
 
     /**
      * @param elem

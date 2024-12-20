@@ -131,7 +131,7 @@ public class KNeighborsClassifier extends ThreadPoolManager implements Estimator
     @Override
     public Double score(final Double[][] testX, final Double[] yTrue) {
         final Double[] yPred = predict(testX);
-        return new RegressorMixin().score(yPred, yTrue);
+        return RegressorMixin.create().score(yPred, yTrue);
     }
 
     /**

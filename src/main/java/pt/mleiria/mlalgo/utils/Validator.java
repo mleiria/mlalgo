@@ -396,7 +396,15 @@ public final class Validator {
      */
     public static <T> boolean anyMatch(List<T> lst, T val) {
         return lst.stream().anyMatch(elem -> elem.equals(val));
-
     }
+
+    public static void validateThrowIfMatch(final Integer a, Integer b,
+                                            final BiPredicate<Integer, Integer> predicate, final Supplier<String> e){
+        if(predicate.test(a, b)){
+            throw new IllegalArgumentException(e.get());
+        }
+    }
+
+
 
 }

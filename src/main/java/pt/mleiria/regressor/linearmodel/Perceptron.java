@@ -98,7 +98,7 @@ public class Perceptron implements Estimator {
     @Override
     public Double score(Double[][] testX, Double[] trueLabelY) {
         final Double[] yPred = predict(testX);
-        return new RegressorMixin().score(yPred, trueLabelY);
+        return RegressorMixin.create().score(yPred, trueLabelY);
     }
 
     @Override

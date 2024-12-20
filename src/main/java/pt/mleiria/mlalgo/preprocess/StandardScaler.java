@@ -24,17 +24,7 @@ public class StandardScaler extends BaseTransformer {
      */
     @Override
     public StandardScaler fit(final Double[][] xTrain) {
-        final int rows = xTrain.length;
-        final int cols = xTrain[0].length;
-        sm = new SummaryStatistics[cols];
-        for (int j = 0; j < cols; j++) {
-            sm[j] = new SummaryStatistics();
-        }
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                sm[j].addValue(xTrain[i][j]);
-            }
-        }
+        sm = accumulateStatistics(xTrain);
         return this;
     }
 

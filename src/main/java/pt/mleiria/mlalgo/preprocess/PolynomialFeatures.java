@@ -8,6 +8,8 @@ package pt.mleiria.mlalgo.preprocess;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import pt.mleiria.mlalgo.core.Transformer;
 
+import java.util.Arrays;
+
 import static java.lang.Math.pow;
 import static java.lang.System.arraycopy;
 import static pt.mleiria.mlalgo.utils.Arrays2D.*;
@@ -71,11 +73,9 @@ public class PolynomialFeatures extends BaseTransformer {
     }
 
     @Override
-    public SummaryStatistics getParams(int colIndex) {
+    public SummaryStatistics getParams(final int colIndex) {
         final SummaryStatistics ss = new SummaryStatistics();
-        for (final Double[] dataX1 : dataX) {
-            ss.addValue(dataX1[colIndex]);
-        }
+        Arrays.stream(dataX).forEach(dataX1 -> ss.addValue(dataX1[colIndex]));
         return ss;
     }
 

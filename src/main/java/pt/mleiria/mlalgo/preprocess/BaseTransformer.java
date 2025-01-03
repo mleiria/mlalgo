@@ -8,6 +8,9 @@ package pt.mleiria.mlalgo.preprocess;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import pt.mleiria.mlalgo.core.Transformer;
 
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 /**
  * @author manuel
  */
@@ -16,7 +19,7 @@ public abstract class BaseTransformer implements Transformer {
     protected SummaryStatistics[] sm;
 
     /**
-     * @param colIndex
+     * @param colIndex the column index
      */
     @Override
     public SummaryStatistics getParams(int colIndex) {
@@ -25,15 +28,15 @@ public abstract class BaseTransformer implements Transformer {
 
     public SummaryStatistics[] accumulateStatistics(final Double[][] xTrain) {
         final int cols = xTrain[0].length;
-        sm = new SummaryStatistics[cols];
-        for (int j = 0; j < cols; j++) {
-            sm[j] = new SummaryStatistics();
-        }
-        for (Double[] doubles : xTrain) {
-            for (int j = 0; j < cols; j++) {
-                sm[j].addValue(doubles[j]);
-            }
-        }
+        // Initialize summary statistics array
+        final SummaryStatistics[] sm = IntStream.range(0, cols)
+                .mapToObj(i -> new SummaryStatistics())
+                .toArray(SummaryStatistics[]::new);
+
+        // Accumulate statistics for each column
+        Stream.of(xTrain)
+                .forEach(row ->
+                        IntStream.range(0, cols).forEach(j -> sm[j].addValue(row[j])));
         return sm;
     }
 

@@ -11,7 +11,6 @@ import pt.mleiria.mlalgo.utils.Arrays2D;
 import pt.mleiria.mlalgo.utils.Tuple2;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.Math.sqrt;
 
@@ -22,17 +21,17 @@ import static java.lang.Math.sqrt;
  */
 public class CrossValidationScore implements Score<Double[][], Double[], Double> {
 
-    private final Estimator estimator;
+    private final Estimator<Double, Double> estimator;
     private Integer cv = 5;
     private final SummaryStatistics sm;
     private  boolean isShuffle;
 
-    public static CrossValidationScore create(final Estimator estimator) {
+    public static CrossValidationScore create(final Estimator<Double, Double> estimator) {
         return new CrossValidationScore(estimator);
     }
 
 
-    private CrossValidationScore(final Estimator estimator) {
+    private CrossValidationScore(final Estimator<Double, Double> estimator) {
         this.estimator = estimator;
         sm = new SummaryStatistics();
     }

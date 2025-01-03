@@ -5,22 +5,14 @@
  */
 package pt.mleiria.mlalgo.distance;
 
-import java.util.stream.IntStream;
-
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class EuclideanDistance implements DistanceMetric<Double[], Double[], Double> {
-
-    //private static final Logger LOG = Logger.getLogger(EuclideanDistance.class.getName());
+public class EuclideanDistance implements DistanceMetric<Double[], Double[], Double>, MinkowskiDistance {
 
     @Override
     public Double calculate(Double[] x, Double[] y) {
-        return Math.sqrt(
-                IntStream.range(0, x.length)
-                        .mapToDouble(i -> Math.pow(x[i] - y[i], 2))
-                        .sum()
-        );
+        return calculate(x, y, 2);
     }
 
 

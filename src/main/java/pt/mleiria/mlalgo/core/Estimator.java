@@ -15,7 +15,7 @@ package pt.mleiria.mlalgo.core;
  *
  * @author manuel
  */
-public interface Estimator {
+public interface Estimator<X, Y> {
 
 
     /**
@@ -25,14 +25,16 @@ public interface Estimator {
      * @param yTrain
      * @return
      */
-    Estimator fit(final Double[][] xTrain, final Double[] yTrain);
+    Estimator<X, Y> fit(final X[][] xTrain, final Y[] yTrain);
 
-    Double[] predict(final Double[][] xSample);
+    X[] predict(final X[][] xSample);
 
-    Double score(Double[][] testX, Double[] trueLabelY);
+    Double score(X[][] testX, Y[] trueLabelY);
 
-    Double[][] getX();
+    X[][] getX();
 
-    Double[] getY();
+    Y[] getY();
+
+
 
 }

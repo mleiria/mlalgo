@@ -16,7 +16,7 @@ import pt.mleiria.mlalgo.utils.Arrays2D;
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class Ridge implements Estimator {
+public class Ridge implements Estimator<Double, Double>, LinearModel<Double> {
 
     private double[] thetas;
     private Double[][] xData;
@@ -25,7 +25,7 @@ public class Ridge implements Estimator {
     private final boolean fitIntercept;
 
     /**
-     * @param lambda
+     * @param lambda      regularization parameter
      * @param fitIntercept if true => addOnes to X[][]
      */
     public Ridge(final double lambda, final boolean fitIntercept) {
@@ -44,7 +44,7 @@ public class Ridge implements Estimator {
     }
 
     @Override
-    public Estimator fit(Double[][] xTrain, Double[] yTrain) {
+    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
 
         this.xData = adjustForFitIntercept(xTrain);
         this.yLabel = yTrain;
@@ -101,16 +101,27 @@ public class Ridge implements Estimator {
     }
 
     private Double[][] adjustForFitIntercept(final Double[][] x) {
-        if (fitIntercept) {
-            return Arrays2D.addOnes(x);
-        }
-        return x;
+        return fitIntercept ? Arrays2D.addOnes(x) : x;
     }
+
+
 
     /**
      * @return
      */
     public double getLambda() {
         return lambda;
+    }
+
+    @Override
+    public Double intercept() {
+        return thetas[0];
+    }
+
+    @Override
+    public Double[] coef() {
+        final double[] coef = new double[thetas.length - 1];
+        System.arraycopy(thetas, 1, coef, 0,thetas.length - 1);
+        return Arrays1D.box(coef);
     }
 }

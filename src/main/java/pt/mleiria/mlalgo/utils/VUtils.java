@@ -53,6 +53,26 @@ public final class VUtils<N extends Number> {
         return sb.toString();
     }
 
+    public String showContents(N[][] arr, final int numLinesToShow) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("[\n");
+        int i = 0;
+        for (final N[] arr1 : arr) {
+            sb.append("[ ");
+            for (final N element : arr1) {
+                sb.append(element).append(" ");
+            }
+            sb.append("]");
+            sb.append("\n");
+            if(i == numLinesToShow){
+                break;
+            }
+            i++;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
     /**
      *
      * @param array

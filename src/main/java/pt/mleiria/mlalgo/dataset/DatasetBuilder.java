@@ -85,4 +85,10 @@ public class DatasetBuilder {
     public Dataset createDataSet() {
         return new Dataset(file, hasRowHeader, isLabelConversion, separator, isLabelInBeginning);
     }
+
+    public Dataset createAndLoadDataSet() {
+        final Dataset dataset = new Dataset(file, hasRowHeader, isLabelConversion, separator, isLabelInBeginning);
+        dataset.loadDataset();
+        return dataset;
+    }
 }

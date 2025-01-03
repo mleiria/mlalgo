@@ -30,7 +30,7 @@ public class RidgeCVTest extends TestCase {
         Double[][] X = ds.featuresX;
         Double[] y = ds.labelsY;
         double[] lambdas = new double[]{0.001, 0.01, 0.1, 1.};
-        Estimator ridgeCV = new RidgeCV(lambdas, 3);
+        Estimator<Double, Double> ridgeCV = new RidgeCV(lambdas, 3);
         ridgeCV.fit(X, y);
         double bestLambda = ((RidgeCV) ridgeCV).getBestLambda();
         LOG.info("Best lambda:" + bestLambda);
@@ -50,7 +50,7 @@ public class RidgeCVTest extends TestCase {
         X[2][1] = 1.;
         Double[] y = new Double[]{0., .1, 1.};
         double[] lambdas = new double[]{0.1, 1., 10.0};
-        Estimator ridgeCV = new RidgeCV(lambdas, 3);
+        Estimator<Double, Double> ridgeCV = new RidgeCV(lambdas, 3);
         ridgeCV.fit(X, y);
         double bestLambda = ((RidgeCV) ridgeCV).getBestLambda();
         LOG.info("Best lambda:" + bestLambda);

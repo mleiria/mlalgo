@@ -12,6 +12,7 @@ import pt.mleiria.mlalgo.distance.EuclideanDistance;
 import pt.mleiria.mlalgo.metrics.RegressorMixin;
 import pt.mleiria.mlalgo.tasks.DistanceTask;
 import pt.mleiria.mlalgo.tasks.ThreadPoolManager;
+import pt.mleiria.mlalgo.utils.Validator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class KNeighborsClassifier extends ThreadPoolManager implements Estimator {
+public class KNeighborsClassifier extends ThreadPoolManager implements Estimator<Double, Double> {
 
     private static final Logger LOG = Logger.getLogger(KNeighborsClassifier.class.getName());
 
@@ -32,28 +33,24 @@ public class KNeighborsClassifier extends ThreadPoolManager implements Estimator
     private Double[][] xData;
     private Double[] yLabel;
 
-    /**
-     * @param k
-     */
-    public KNeighborsClassifier(final int k) {
-        this.k = k;
-        dm = new EuclideanDistance();
+    public static KNeighborsClassifier create(final int k) {
+        return new KNeighborsClassifier(k);
     }
 
     /**
      * @param k
-     * @param dm
      */
-    public KNeighborsClassifier(final int k, final DistanceMetric<Double[], Double[], Double> dm) {
+    private KNeighborsClassifier(final int k) {
         this.k = k;
-        this.dm = dm;
     }
+
 
     /**
      * @param dm
      */
-    public void setDm(final DistanceMetric<Double[], Double[], Double> dm) {
+    public Estimator<Double, Double> setDm(final DistanceMetric<Double[], Double[], Double> dm) {
         this.dm = dm;
+        return this;
     }
 
     /**
@@ -62,9 +59,13 @@ public class KNeighborsClassifier extends ThreadPoolManager implements Estimator
      * @return
      */
     @Override
-    public Estimator fit(Double[][] xData, Double[] yLabel) {
+    public Estimator<Double, Double> fit(Double[][] xData, Double[] yLabel) {
         this.xData = xData;
         this.yLabel = yLabel;
+        if(Validator.isNull(dm)){
+            dm = new EuclideanDistance();
+        }
+        LOG.info("KNeighborsClassifier fit with " + xData.length + " samples");
         return this;
     }
 

@@ -3,6 +3,10 @@
  */
 package pt.mleiria.mlalgo.metrics;
 
+import pt.mleiria.mlalgo.utils.Validator;
+
+import java.util.Objects;
+
 /**
  * Mixin class for all regression estimators
  *
@@ -28,10 +32,9 @@ public class RegressorMixin implements Score<Double[], Double[], Double> {
      */
     @Override
     public Double score(Double[] yPred, Double[] yTrue) {
+        Validator.validateThrowIfMatch(yPred.length, yTrue.length, (a, b) -> !Objects.equals(a, b),
+                () -> "Sizes dont match yPred: " + yPred.length + " yTrue: " + yTrue.length);
         final int size = yPred.length;
-        if (size != yTrue.length) {
-            throw new IllegalArgumentException("Sizes dont match.");
-        }
         double u = 0.0;
         double sumYTrue = 0.;
         for (int i = 0; i < size; i++) {

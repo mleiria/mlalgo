@@ -5,13 +5,19 @@
  */
 package pt.mleiria.mlalgo.metrics;
 
+import pt.mleiria.mlalgo.utils.Validator;
+
 import java.util.Objects;
+import java.util.function.IntPredicate;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
 public class AccuracyScore implements Score<Double[], Double[], Double> {
+
+    private static final Logger LOG = Logger.getLogger(AccuracyScore.class.getName());
 
     /**
      * @param yPred
@@ -41,15 +47,11 @@ public class AccuracyScore implements Score<Double[], Double[], Double> {
      * @return
      */
     private double calculate(Double[] yPred, Double[] yTrue) {
-        final int size = yPred.length;
-        if (size != yTrue.length) {
-            throw new IllegalArgumentException("Sizes dont match.");
-        }
+        Validator.validateThrowIfMatch(yPred.length, yTrue.length, (a,b) -> !Objects.equals(a, b),
+                () -> "Sizes dont match yPred: " + yPred.length + " yTrue: " + yTrue.length);
         return
-        IntStream.range(0,size)
-                .filter(i -> Objects.equals(yTrue[i], yPred[i]))
-                .count();
+                IntStream.range(0, yPred.length)
+                        .filter(i -> yTrue[i].doubleValue() == yPred[i].doubleValue())
+                        .count();
     }
-
-
 }

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author manuel
  *
  */
-public class SGDClassifier implements Estimator {
+public class SGDClassifier implements Estimator<Double, Double> {
 
     private static final Logger LOG = Logger.getLogger(SGDClassifier.class.getName());
 
@@ -63,7 +63,7 @@ public class SGDClassifier implements Estimator {
      * @see pt.mleiria.mlalgo.core.Estimator#fit(java.lang.Double[][], java.lang.Double[])
      */
     @Override
-    public Estimator fit(final Double[][] xTrain, final Double[] yTrain) {
+    public Estimator<Double, Double> fit(final Double[][] xTrain, final Double[] yTrain) {
         this.xData = xTrain;
         this.yLabel = yTrain;
         Double[] weights = Arrays1D.rand(xTrain[0].length);

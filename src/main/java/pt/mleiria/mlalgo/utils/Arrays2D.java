@@ -20,6 +20,8 @@ public class Arrays2D {
 
     //private static final Logger LOG = Logger.getLogger(Arrays2D.class.getName());
 
+    private static final int parallelThreshold = 30000000;
+
     private Arrays2D() {
     }
 
@@ -48,11 +50,6 @@ public class Arrays2D {
     }
 
 
-    Predicate<Integer> testIntPred(final Integer i) {
-        return x -> x.intValue() != i.intValue();
-    }
-
-    Function<Integer, Predicate<Integer>> testFuncPred = i -> x -> x.intValue() != i.intValue();
 
     /**
      * Element wise multiplication
@@ -65,9 +62,9 @@ public class Arrays2D {
         Validator.validateThrowIfMatch(x.length, y.length, (a, b) -> !Objects.equals(a, b),
                 () -> "Vectors must be the same size. Found x: " + x.length + " y: " + y.length);
         return
-                IntStream.range(0, x.length)
-                        .mapToDouble(i -> x[i] * y[i])
-                        .toArray();
+                x.length > parallelThreshold
+                        ? IntStream.range(0, x.length).parallel().mapToDouble(i -> x[i] * y[i]).toArray()
+                        : IntStream.range(0, x.length).mapToDouble(i -> x[i] * y[i]).toArray();
     }
 
     /**
@@ -438,7 +435,7 @@ public class Arrays2D {
         final int cols = trainX[0].length;
         final int length = rows / cv;
         final List<Integer> lst = new ArrayList<>(rows);
-        IntStream.range(0, rows).forEach(i -> lst.add(i));
+        IntStream.range(0, rows).forEach(lst::add);
         if (isShuffle) {
             Collections.shuffle(lst);
         }

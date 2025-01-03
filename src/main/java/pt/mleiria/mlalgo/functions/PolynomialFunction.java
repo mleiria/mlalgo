@@ -30,9 +30,7 @@ public class PolynomialFunction implements OneVarFunction<Double, Double> {
         final int n = coefficients.length;
         final double[] coef = new double[n];
         coef[0] = coefficients[0] + r;
-        for (int i = 1; i < n; i++) {
-            coef[i] = coefficients[i];
-        }
+        System.arraycopy(coefficients, 1, coef, 1, n - 1);
         return new PolynomialFunction(coef);
     }
 

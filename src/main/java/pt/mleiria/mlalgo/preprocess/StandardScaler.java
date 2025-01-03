@@ -5,12 +5,10 @@
  */
 package pt.mleiria.mlalgo.preprocess;
 
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-
 import static java.lang.Math.sqrt;
 
 /**
- * is a transformer and a estimator
+ * is a transformer and an estimator
  *
  * @author manuel
  */
@@ -19,8 +17,8 @@ public class StandardScaler extends BaseTransformer {
     /**
      * Compute the mean and std to be used for later scaling.
      *
-     * @param xTrain
-     * @return
+     * @param xTrain the data used to compute the mean and standard deviation
+     * @return StandardScaler object
      */
     @Override
     public StandardScaler fit(final Double[][] xTrain) {

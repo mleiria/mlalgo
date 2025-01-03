@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * @author manuel
  *
  */
-public class Perceptron implements Estimator {
+public class Perceptron implements Estimator<Double, Double> {
 
     private static final Logger LOG = Logger.getLogger(Perceptron.class.getName());
 
@@ -30,7 +30,7 @@ public class Perceptron implements Estimator {
 
 
     @Override
-    public Estimator fit(Double[][] xTrain, Double[] yTrain) {
+    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
         this.xData = xTrain;
         this.yLabel = yTrain;
         this.w = new double[yTrain.length];

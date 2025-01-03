@@ -6,23 +6,27 @@
 package pt.mleiria.mlalgo.preprocess;
 
 import junit.framework.TestCase;
+import org.apache.commons.csv.CSVRecord;
 import pt.mleiria.mlalgo.core.Estimator;
+import pt.mleiria.mlalgo.dataset.CsvReader;
 import pt.mleiria.mlalgo.dataset.Dataset;
 import pt.mleiria.mlalgo.dataset.DatasetBuilder;
+import pt.mleiria.mlalgo.distance.CosineDistance;
+import pt.mleiria.mlalgo.distance.EuclideanDistance;
 import pt.mleiria.mlalgo.metrics.AccuracyScore;
 import pt.mleiria.mlalgo.metrics.CrossValidationScore;
 import pt.mleiria.mlalgo.metrics.Score;
-import pt.mleiria.mlalgo.utils.Arrays2D;
-import pt.mleiria.mlalgo.utils.ResourceFileLoader;
-import pt.mleiria.mlalgo.utils.Tuple2;
-import pt.mleiria.mlalgo.utils.VUtils;
+import pt.mleiria.mlalgo.preprocess.knn.aux.KNeighborsProcessor;
+import pt.mleiria.mlalgo.preprocess.knn.aux.Movie;
+import pt.mleiria.mlalgo.utils.*;
 import pt.mleiria.neighbors.classifier.KNeighborsClassifier;
 import pt.mleiria.syntheticdata.DataFactory;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
@@ -30,6 +34,7 @@ import java.util.logging.Logger;
 public class KNeighborsClassifierTest extends TestCase {
 
     private static final Logger LOG = Logger.getLogger(KNeighborsClassifierTest.class.getName());
+
     private VUtils<Number> v;
     private Score<Double[], Double[], Double> score;
 
@@ -39,6 +44,38 @@ public class KNeighborsClassifierTest extends TestCase {
         score = new AccuracyScore();
     }
 
+    public void testPredictBankData() {
+        final String dataFile = ResourceFileLoader.getFilePath("bank.data");
+        final Dataset ds = DatasetBuilder.create(dataFile)
+                .setHasRowHeader(false)
+                .setIsLabelConversion(true)
+                .setSeparator(";")
+                .createDataSet();
+        ds.loadDataset();
+        final Double[][] x = ds.featuresX;
+        final Double[] y = ds.labelsY;
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
+        estimator.fit(x, y);
+        //Test set
+        final String testFile = ResourceFileLoader.getFilePath("bank.test");
+        final Dataset dsTest = DatasetBuilder.create(testFile)
+                .setHasRowHeader(false)
+                .setIsLabelConversion(true)
+                .setSeparator(";")
+                .createDataSet();
+        dsTest.loadDataset();
+        final Double[][] xTest = dsTest.featuresX;
+        final Double[] yTest = dsTest.labelsY;
+
+        final Double[] predY = estimator.predict(xTest);
+        LOG.log(Level.INFO, "predY Bank Data:\n{0}", v.showContents(predY));
+        LOG.log(Level.INFO, "Ground data Bank Data:\n{0}", v.showContents(yTest));
+        LOG.log(Level.INFO, "Labels:{0}", ds.getLabelHolder().toString());
+        final double accuracyScore = score.score(predY, yTest);
+        LOG.log(Level.INFO, "Score: {0}", accuracyScore);
+        assertEquals(0.904, accuracyScore, 0.01);
+    }
+
     public void testPredict() {
         final Double[][] x = new Double[4][1];
         x[0][0] = 0.;
@@ -46,7 +83,7 @@ public class KNeighborsClassifierTest extends TestCase {
         x[2][0] = 2.;
         x[3][0] = 3.;
         final Double[] y = new Double[]{0., 0., 1., 1.};
-        final Estimator knn = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> knn = KNeighborsClassifier.create(3);
         knn.fit(x, y);
         final Double[][] value = new Double[1][1];
         value[0][0] = 1.1;
@@ -61,7 +98,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[][] testX = splitter.get(1).getX();
         final Double[] trainY = splitter.get(0).getY();
         final Double[] testY = splitter.get(1).getY();
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3).setDm(new EuclideanDistance());
         estimator.fit(trainX, trainY);
         final Double[] predY = estimator.predict(testX);
         LOG.log(Level.INFO, "predY:\n{0}", v.showContents(predY));
@@ -76,7 +113,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Tuple2<Double[][], Double[]> ds = DataFactory.loadIrisDataset();
         final Double[][] trainX = ds.getX();
         final Double[] trainY = ds.getY();
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
         estimator.fit(trainX, trainY);
         final Double res = CrossValidationScore.create(estimator)
                 .setCv(5)
@@ -90,7 +127,7 @@ public class KNeighborsClassifierTest extends TestCase {
         int bestK = 0;
         double bestKScore = 0.;
         for (int k = 3; k < 10; k++) {
-            final Estimator estimator = new KNeighborsClassifier(k);
+            final Estimator<Double, Double> estimator = KNeighborsClassifier.create(k);
             estimator.fit(trainX, trainY);
             final CrossValidationScore cv = CrossValidationScore.create(estimator)
                     .setCv(5)
@@ -119,7 +156,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
 
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
         estimator.fit(x, y);
 
         final Double[] predY = estimator.predict(getThreeSamples());
@@ -141,7 +178,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
 
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
         estimator.fit(x, y);
 
         final Double[] predY = estimator.predict(getOneSampleVirginica());
@@ -161,7 +198,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
 
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
         estimator.fit(x, y);
 
         final Double[] predY = estimator.predict(getOneSampleSetosa());
@@ -181,7 +218,7 @@ public class KNeighborsClassifierTest extends TestCase {
         final Double[][] x = ds.featuresX;
         final Double[] y = ds.labelsY;
 
-        final Estimator estimator = new KNeighborsClassifier(3);
+        final Estimator<Double, Double> estimator = KNeighborsClassifier.create(3);
         estimator.fit(x, y);
 
         final Double[] predY = estimator.predict(getOneSampleVersicolor());
@@ -247,5 +284,69 @@ public class KNeighborsClassifierTest extends TestCase {
         res[2][3] = 0.2;
         return res;
     }
+
+    public void testMoviesDataset() {
+        StopWatch stopWatch = new StopWatch();
+        final KNeighborsProcessor knnProcessor = getKNeighborsProcessor();
+        final Double[][] x = knnProcessor.getMovieUserMatrix();
+        LOG.info(v.showContents(x, 10));
+        LOG.info(stopWatch.elapsedTimeToString());
+
+        double r1 = knnProcessor.extractRating(7, 1); //4.5
+        double r2 = knnProcessor.extractRating(6, 4); //3.0
+        double r3 = knnProcessor.extractRating(608, 3); //2.0
+        double r4 = knnProcessor.extractRating(604, 5); //3.0
+        assertEquals(4.5, r1);
+        assertEquals(3.0, r2);
+        assertEquals(2.0, r3);
+        assertEquals(3.0, r4);
+        // Some queries to see the data
+        final int matrixMovieId = 2571; // Movie Matrix
+        knnProcessor.getDataFromMovieId(matrixMovieId);
+
+        KNeighborsClassifier knn = KNeighborsClassifier.create(30);
+        knn.setDm(new EuclideanDistance());
+        knn.fit(x, knnProcessor.getMoviesList());
+        // Prediction for matrix movie
+        LOG.info("Matrix ratings:" +knnProcessor.getMovieUserRatings(matrixMovieId));
+        final Double[] testX = knnProcessor.getDataFromMovieId(matrixMovieId);
+        final Double[][] test = new Double[1][];
+        test[0] = testX;
+        final Double[] predY = knn.predict(test);
+        LOG.info("Prediction for movie 2571: " + predY[0]);
+        knnProcessor.getDataFromMovieId(predY[0].intValue());
+
+
+
+    }
+
+    private static KNeighborsProcessor getKNeighborsProcessor() {
+        final String ratingsFilePath = "src/test/resources/movies/ratings.csv";
+        // userId,movieId,rating,timestamp
+        final List<CSVRecord> ratings = CsvReader.getCsvRecords(ratingsFilePath);
+        // Create an Double[movieId][userId]
+        final List<Movie> moviesList =
+                ratings.stream()
+                        .map(rating -> {
+                            final int userId = Integer.parseInt(rating.get("userId"));
+                            final int movieId = Integer.parseInt(rating.get("movieId"));
+                            final double ratingValue = Double.parseDouble(rating.get("rating"));
+                            return new Movie(userId, movieId, ratingValue, "");
+                        })
+                        .toList();
+        final List<Integer> uniqueUsers = moviesList.stream()
+                .map(Movie::userId)
+                .distinct()
+                .toList();
+        final List<Integer> uniqueMovies = moviesList.stream()
+                .map(Movie::movieId)
+                .distinct()
+                .toList();
+        final KNeighborsProcessor knnProcessor = new KNeighborsProcessor(uniqueUsers, uniqueMovies, moviesList);
+
+        LOG.info("Creating the ratings matrix...");
+        return knnProcessor;
+    }
+
 
 }

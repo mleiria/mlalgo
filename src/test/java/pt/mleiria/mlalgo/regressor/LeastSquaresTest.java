@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class LinearRegressionTest extends TestCase {
+public class LeastSquaresTest extends TestCase {
 
-    private static final Logger LOG = Logger.getLogger(LinearRegressionTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(LeastSquaresTest.class.getName());
 
-    private VUtils<Number> vu;
+    private VUtils<Double> vu;
 
     @Override
     protected void setUp() throws Exception {
@@ -31,7 +31,7 @@ public class LinearRegressionTest extends TestCase {
     /**
      *
      */
-    public void testLinearRegression() {
+    public void testLeastSquares() {
         final LeastSquares lr = new LeastSquares();
         final Double[][] x = new Double[4][2];
         x[0][0] = 1.;
@@ -47,8 +47,11 @@ public class LinearRegressionTest extends TestCase {
 
         final Double[] y = new Double[]{-1., 0.2, 0.9, 2.1};
         lr.fit(x, y);
-        assertEquals(-0.9500000000000005, lr.getIntercept());
-        assertEquals(1.0000000000000004, lr.getSlope());
+        assertEquals(-0.9500000000000005, lr.intercept());
+        assertEquals(1.0000000000000004, lr.coef()[0]);
+        assertEquals(1, lr.coef().length);
     }
+
+
 
 }

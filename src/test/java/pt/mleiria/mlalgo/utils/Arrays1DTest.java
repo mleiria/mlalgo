@@ -1,7 +1,6 @@
 package pt.mleiria.mlalgo.utils;
 
 import junit.framework.TestCase;
-import org.junit.Ignore;
 
 import java.util.Arrays;
 import java.util.logging.Logger;

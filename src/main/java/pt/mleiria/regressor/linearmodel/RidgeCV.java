@@ -6,8 +6,6 @@ package pt.mleiria.regressor.linearmodel;
 import pt.mleiria.mlalgo.core.Estimator;
 import pt.mleiria.mlalgo.metrics.CrossValidationScore;
 
-import java.util.Optional;
-
 /**
  * Implements ridge regression with built-in cross-validation of the alpha
  * parameter
@@ -15,14 +13,14 @@ import java.util.Optional;
  * @author manuel
  *
  */
-public class RidgeCV implements Estimator {
+public class RidgeCV implements Estimator<Double, Double> {
 
 
     private final double[] lambdas;
     private final boolean fitIntercept;
     private final int cv;
     private final boolean isShuffle;
-    private Estimator bestRidge;
+    private Estimator<Double, Double> bestRidge;
 
     /**
      *
@@ -50,10 +48,10 @@ public class RidgeCV implements Estimator {
 
 
     @Override
-    public Estimator fit(Double[][] xTrain, Double[] yTrain) {
+    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
         double bestScore = Double.NEGATIVE_INFINITY;
-        for (int i = 0; i < lambdas.length; i++) {
-            Ridge ridge = new Ridge(lambdas[i], fitIntercept);
+        for (final double lambda : lambdas) {
+            final Ridge ridge = new Ridge(lambda, fitIntercept);
 
             final Double score = CrossValidationScore.create(ridge)
                     .setCv(cv)
@@ -63,7 +61,7 @@ public class RidgeCV implements Estimator {
 
             if (score > bestScore) {
                 bestScore = score;
-                bestRidge = new Ridge(lambdas[i], fitIntercept);
+                bestRidge = new Ridge(lambda, fitIntercept);
             }
         }
         bestRidge.fit(xTrain, yTrain);

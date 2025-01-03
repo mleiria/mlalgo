@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * @author manuel
  */
-public class BatchGDRegressor implements Estimator {
+public class BatchGDRegressor implements Estimator<Double, Double> {
 
     private static final Logger LOG = Logger.getLogger(BatchGDRegressor.class.getName());
 /*
@@ -50,7 +50,7 @@ public class BatchGDRegressor implements Estimator {
 
 
     @Override
-    public Estimator fit(Double[][] xTrain, Double[] yTrain) {
+    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

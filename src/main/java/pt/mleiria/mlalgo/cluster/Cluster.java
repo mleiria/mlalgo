@@ -4,23 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cluster {
-    Point centroid;
-    List<Point> points;
+    private int id;
+    private Point centroid;
+    private List<Point> points;
 
-    Cluster(Point centroid) {
-        this.centroid = centroid;
+    public Cluster(int id) {
+        this.id = id;
         this.points = new ArrayList<>();
     }
 
-    void addPoint(Point point) {
+    public void addPoint(Point point) {
         points.add(point);
     }
 
-    void clearPoints() {
+    public void clearPoints() {
         points.clear();
     }
 
-    Point getCentroid() {
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public Point getCentroid() {
         return centroid;
+    }
+
+    public void setCentroid(Point centroid) {
+        this.centroid = centroid;
+    }
+
+    @Override
+    public String toString() {
+        return "Cluster " + id + " centroid: " + centroid + " points: " + points;
     }
 }

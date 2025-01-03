@@ -16,7 +16,7 @@ import pt.mleiria.mlalgo.utils.Arrays2D;
 /**
  * @author Manuel Leiria <manuel.leiria at gmail.com>
  */
-public class LeastSquares implements Estimator {
+public class LeastSquares implements Estimator<Double, Double>, LinearModel<Double> {
 
     private double[] w;
     private Double[][] xData;
@@ -24,7 +24,7 @@ public class LeastSquares implements Estimator {
 
 
     @Override
-    public Estimator fit(Double[][] xTrain, Double[] yTrain) {
+    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
         this.xData = xTrain;
         this.yLabel = yTrain;
         final RealMatrix x = new Array2DRowRealMatrix(Arrays2D.copyToPrimitive(xData));
@@ -66,15 +66,16 @@ public class LeastSquares implements Estimator {
         return yLabel;
     }
 
-    public double getIntercept() {
+    @Override
+    public Double intercept() {
         return w[0];
     }
 
-    public double getSlope() {
-        return w[1];
+    @Override
+    public Double[] coef() {
+        final double[] coef = new double[w.length - 1];
+        System.arraycopy(w, 1, coef, 0,w.length - 1);
+        return Arrays1D.box(coef);
     }
 
-    public double[] getCoefs() {
-        return w;
-    }
 }

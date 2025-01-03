@@ -84,7 +84,7 @@ public class SGDClassifierTest extends TestCase {
         final Double[] testYFiltered = Arrays1D.filter(testY, elem -> elem == 1.);
 
 
-        final Estimator estimator = new SGDClassifier(0.001, 2000, 8);
+        final Estimator<Double, Double> estimator = new SGDClassifier(0.001, 2000, 8);
         estimator.fit(trainX, trainYFiltered);
 
         final Double[] predict = estimator.predict(testX);

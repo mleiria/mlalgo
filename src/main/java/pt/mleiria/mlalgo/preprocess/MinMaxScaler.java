@@ -5,8 +5,6 @@
  */
 package pt.mleiria.mlalgo.preprocess;
 
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-
 /**
  * @author manuel
  */

@@ -64,6 +64,21 @@ public class Dataset {
         this.isLabelInBeginning = isLabelInBeginning;
     }
 
+    public void dropColumns(final int... colsToDrop){
+        final int newCols = featuresX[0].length - colsToDrop.length;
+        final Double[][] newFeatures = new Double[featuresX.length][newCols];
+        for(int i = 0; i < featuresX.length; i++){
+            int newColIndex = 0;
+            for(int j = 0; j < featuresX[i].length; j++){
+                if(Arrays.binarySearch(colsToDrop, j) < 0){
+                    newFeatures[i][newColIndex] = featuresX[i][j];
+                    newColIndex++;
+                }
+            }
+        }
+        featuresX = newFeatures;
+    }
+
     /**
      *
      */

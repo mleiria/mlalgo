@@ -1,88 +1,47 @@
 package pt.mleiria.mlalgo.cluster;
 
-import pt.mleiria.mlalgo.core.Estimator;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
-public class KMeans implements Estimator<Double, Double> {
-    private static final Logger LOG = Logger.getLogger(KMeans.class.getName());
-
-    private Double[][] xData;
-    private Double[] yLabel;
-    private int clusterSize;
-    private int maxIterations;
+public class KMeansDemo {
+    private final int k;
+    private final int maxIterations;
     private List<Point> points;
     private List<Cluster> clusters;
 
-    public KMeans() {
-        this.clusterSize = 8;
-        this.maxIterations = 300;
-    }
-
-    @Override
-    public Estimator<Double, Double> fit(Double[][] xTrain, Double[] yTrain) {
-        points = new ArrayList<>();
-        clusters = new ArrayList<>();
-        Arrays.stream(xTrain).forEach(x -> points.add(new Point(x[0], x[1])));
-        init(points);
-        calculate();
-        for (int i = 0; i < getClusters().size(); i++) {
-            Cluster cluster = getClusters().get(i);
-            LOG.info("Cluster " + i + " centroid: " + cluster.getCentroid());
-            LOG.info("Cluster " + i + " points: " + cluster.getPoints());
-        }
-        return this;
-    }
-
-
-    @Override
-    public Double[] predict(Double[][] xSample) {
-        double minDistance = Double.MAX_VALUE;
-        Cluster closestCluster = null;
-        for (Cluster cluster : clusters) {
-            double distance = Point.distance(new Point(xSample[0][0], xSample[0][1]), cluster.getCentroid());
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestCluster = cluster;
-            }
-        }
-        return new Double[] {closestCluster.getCentroid().getX(), closestCluster.getCentroid().getY()};
-    }
-
-
-    @Override
-    public Double score(Double[][] testX, Double[] trueLabelY) {
-        return 0.0;
-    }
-
-    @Override
-    public Double[][] getX() {
-        return this.xData;
-    }
-
-    @Override
-    public Double[] getY() {
-        return this.yLabel;
-    }
-
-    public KMeans setClusterSize(int clusterSize) {
-        this.clusterSize = clusterSize;
-        return this;
-    }
-    public KMeans setMaxIterations(int maxIterations) {
+    public KMeansDemo(int k, int maxIterations) {
+        this.k = k;
         this.maxIterations = maxIterations;
-        return this;
+        this.points = new ArrayList<>();
+        this.clusters = new ArrayList<>();
     }
 
-    private void init(List<Point> points) {
+    public static void main(String[] args) {
+        List<Point> points = new ArrayList<>();
+        points.add(new Point(1.0, 2.0));
+        points.add(new Point(2.0, 3.0));
+        points.add(new Point(3.0, 4.0));
+        points.add(new Point(8.0, 9.0));
+        points.add(new Point(9.0, 10.0));
+        points.add(new Point(10.0, 11.0));
+
+        KMeansDemo kMeans = new KMeansDemo(2, 100);
+        kMeans.init(points);
+        kMeans.calculate();
+
+        for (int i = 0; i < kMeans.getClusters().size(); i++) {
+            Cluster cluster = kMeans.getClusters().get(i);
+            System.out.println("Cluster " + i + " centroid: " + cluster.getCentroid());
+            System.out.println("Cluster " + i + " points: " + cluster.getPoints());
+        }
+    }
+
+    public void init(List<Point> points) {
         this.points = points;
 
         // Initialize clusters
-        for (int i = 0; i < clusterSize; i++) {
+        for (int i = 0; i < k; i++) {
             Cluster cluster = new Cluster(i);
             Point centroid = points.get(new Random().nextInt(points.size()));
             cluster.setCentroid(centroid);
@@ -93,7 +52,7 @@ public class KMeans implements Estimator<Double, Double> {
         assignClusters();
     }
 
-    private void calculate() {
+    public void calculate() {
         boolean finish = false;
         int iteration = 0;
 
@@ -153,7 +112,7 @@ public class KMeans implements Estimator<Double, Double> {
     }
 
     private List<Point> getCentroids() {
-        List<Point> centroids = new ArrayList<>(clusterSize);
+        List<Point> centroids = new ArrayList<>(k);
         for (Cluster cluster : clusters) {
             centroids.add(cluster.getCentroid());
         }

@@ -10,7 +10,7 @@ package pt.mleiria.mlalgo.core;
  *
  * @author manuel
  */
-public interface Predictor extends Estimator {
+public interface Predictor extends Estimator<Double, Double> {
 
     Predictor fit(double[][] xTrain, double[] yTrain);
 
